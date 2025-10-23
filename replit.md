@@ -66,9 +66,19 @@ Preferred communication style: Simple, everyday language.
 -   `eslint`
 -   `prettier`
 
-### Analytics
+### Analytics & Measurement
 
--   Plausible (conditional integration)
+-   **Plausible Analytics**: Conditional integration for production environments
+-   **Event Tracking System**: Comprehensive analytics tracking for conversion optimization
+    -   **TTFC (Time to First CTA Click)**: Measures time from page load to first CTA interaction, tracked per page with automatic reset on navigation
+    -   **CTA Click Tracking**: All call-to-action buttons (hero, footer, content) tracked with location and page context
+    -   **Work Card Tracking**: Case study card clicks tracked with position data for engagement analysis
+    -   **Scroll Milestone Tracking**: Case study read depth tracked at 25%, 50%, 75%, and 90% scroll points
+-   **Global Tracking Infrastructure**: 
+    -   `lib/analytics.ts`: Core tracking functions with page-specific state management
+    -   `hooks/useScrollMilestones.ts`: React hook for scroll depth tracking
+    -   `components/GlobalTTFCInitializer.tsx`: Automatic TTFC initialization on all pages
+-   **Experiment Tracking**: `CHANGES.md` documents A/B tests and conversion optimization experiments
 
 ### SEO
 
