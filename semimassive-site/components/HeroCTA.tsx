@@ -1,10 +1,11 @@
 'use client';
 
-import { track } from '@/lib/analytics';
+import { track, trackFirstCta } from '@/lib/analytics';
 
 export function HeroCTA() {
   const handleClick = () => {
-    track('CTA Click', { location: 'hero' });
+    trackFirstCta('hero', 'home');
+    track('CTA Click', { location: 'hero', page: 'home' });
   };
 
   return (

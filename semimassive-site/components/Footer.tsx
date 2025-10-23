@@ -1,9 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { track, trackFirstCta } from '@/lib/analytics';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  const handleContactClick = () => {
+    const page = pathname === '/' ? 'home' : pathname.slice(1) || 'global';
+    trackFirstCta('footer', page);
+    track('CTA Click', { location: 'footer', page });
+  };
 
   const navItems = [
     { href: '/', label: 'Home', isExternal: false },
@@ -29,6 +38,7 @@ export function Footer() {
                   <a
                     href={item.href}
                     className="text-text-300 hover:text-text-100 transition-colors text-base no-underline"
+                    onClick={item.label === 'Contact' ? handleContactClick : undefined}
                   >
                     {item.label}
                   </a>

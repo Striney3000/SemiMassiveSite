@@ -11,6 +11,7 @@ import { Snapshot } from '@/components/Snapshot';
 import { CTA } from '@/components/CTA';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Breadcrumb } from '@/components/Breadcrumb';
+import { CaseStudyPageWrapper } from '@/components/CaseStudyPageWrapper';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -114,75 +115,77 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const hasLongContent = content.length > 2000;
 
   return (
-    <div className="w-full min-h-screen">
-      <ProgressBar show={hasLongContent} />
-      
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.creativeWork) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.breadcrumb) }}
-      />
-
-      <Section className="max-w-5xl mx-auto" animate={false}>
-        <Breadcrumb
-          items={[
-            { name: 'Home', href: '/' },
-            { name: 'Work', href: '/work' },
-            { name: meta.title, href: `/work/${slug}` },
-          ]}
-        />
+    <CaseStudyPageWrapper slug={slug}>
+      <div className="w-full min-h-screen">
+        <ProgressBar show={hasLongContent} />
         
-        <header className="space-y-6 mb-12">
-          <div className="space-y-2">
-            {meta.client && meta.year && (
-              <p className="text-text-300 text-lg">
-                {meta.client} • {meta.year}
-              </p>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.creativeWork) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.breadcrumb) }}
+        />
+
+        <Section className="max-w-5xl mx-auto" animate={false}>
+          <Breadcrumb
+            items={[
+              { name: 'Home', href: '/' },
+              { name: 'Work', href: '/work' },
+              { name: meta.title, href: `/work/${slug}` },
+            ]}
+          />
+          
+          <header className="space-y-6 mb-12">
+            <div className="space-y-2">
+              {meta.client && meta.year && (
+                <p className="text-text-300 text-lg">
+                  {meta.client} • {meta.year}
+                </p>
+              )}
+              <h1 className="text-text-100">{meta.title}</h1>
+            </div>
+
+            {meta.pillars && meta.pillars.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {meta.pillars.map((pillar) => (
+                  <span
+                    key={pillar}
+                    className="px-4 py-2 text-sm font-medium bg-base-900 border border-base-800 text-text-100 rounded-full"
+                  >
+                    {pillar}
+                  </span>
+                ))}
+              </div>
             )}
-            <h1 className="text-text-100">{meta.title}</h1>
-          </div>
 
-          {meta.pillars && meta.pillars.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {meta.pillars.map((pillar) => (
-                <span
-                  key={pillar}
-                  className="px-4 py-2 text-sm font-medium bg-base-900 border border-base-800 text-text-100 rounded-full"
-                >
-                  {pillar}
-                </span>
-              ))}
-            </div>
-          )}
+            <p className="text-xl md:text-2xl text-text-100 leading-relaxed max-w-3xl">
+              {meta.summary}
+            </p>
 
-          <p className="text-xl md:text-2xl text-text-100 leading-relaxed max-w-3xl">
-            {meta.summary}
-          </p>
+            {meta.impact && meta.impact.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pt-8">
+                {meta.impact.map((item, index) => {
+                  const parts = item.split(/\s+/);
+                  const value = parts[0];
+                  const label = parts.slice(1).join(' ');
 
-          {meta.impact && meta.impact.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pt-8">
-              {meta.impact.map((item, index) => {
-                const parts = item.split(/\s+/);
-                const value = parts[0];
-                const label = parts.slice(1).join(' ');
+                  return (
+                    <Metric
+                      key={index}
+                      value={value}
+                      label={label}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </header>
 
-                return (
-                  <Metric
-                    key={index}
-                    value={value}
-                    label={label}
-                  />
-                );
-              })}
-            </div>
-          )}
-        </header>
-
-        <div className="mt-12">{mdxContent as React.ReactNode}</div>
-      </Section>
-    </div>
+          <div className="mt-12">{mdxContent as React.ReactNode}</div>
+        </Section>
+      </div>
+    </CaseStudyPageWrapper>
   );
 }

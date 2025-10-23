@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import { PageTransition } from '@/components/PageTransition';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { GlobalTTFCInitializer } from '@/components/GlobalTTFCInitializer';
 import './globals.css';
 
 const inter = Inter({
@@ -61,6 +62,7 @@ export default function RootLayout({
         )}
       </head>
       <body>
+        <GlobalTTFCInitializer />
         <a href="#content" className="skip-link">
           Skip to content
         </a>
