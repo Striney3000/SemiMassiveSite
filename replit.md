@@ -70,10 +70,33 @@ Preferred communication style: Simple, everyday language.
 - Path aliases configured (`@/*`) for cleaner imports
 - Next.js plugin enabled for enhanced TypeScript support
 
+### SEO Infrastructure (Added Oct 23, 2025)
+
+**Automated Sitemap Generation**: next-sitemap
+- **Implementation**: Automatically generates sitemap.xml and robots.txt on every build
+- **Configuration**: All routes (/, /work, /about, /services) with priorities (homepage=1.0, others=0.7)
+- **Rationale**: Essential for search engine discovery and crawling efficiency
+
+**Metadata System**: generateMetadata on all pages
+- **Implementation**: Each page has canonical URLs, OpenGraph tags, and Twitter card metadata
+- **Rationale**: Improves social sharing and search engine understanding
+
+**Security Headers**: Configured in next.config.ts
+- Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+- **Rationale**: Protects against XSS, clickjacking, and other security vulnerabilities
+
+**Accessibility**: ESLint jsx-a11y plugin enabled
+- **Implementation**: Enforces WCAG accessibility rules during linting
+- **Rationale**: Ensures the site is accessible to all users including those with disabilities
+
+**Analytics Placeholder**: Plausible (commented out)
+- **Implementation**: Privacy-focused analytics ready to enable in production
+- **Note**: Uncomment in layout.tsx and set NEXT_PUBLIC_PLAUSIBLE_DOMAIN when ready
+
 ### Development Tooling
 
 **Code Quality**:
-- ESLint with Next.js core web vitals rules
+- ESLint with Next.js core web vitals rules and jsx-a11y accessibility plugin
 - Prettier for consistent code formatting
 - TypeScript type checking in CI/CD pipelines
 
