@@ -1,0 +1,197 @@
+1) Install deps
+
+Add: next-seo, next-sitemap, zod
+
+Dev: eslint-plugin-jsx-a11y
+
+2) Environment & config files
+
+Create .env.local with placeholders:
+
+NEXT_PUBLIC_SITE_URL=https://semimassive.com
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=semimassive.com
+
+
+(Do not commit .env.local.)
+
+Add next-sitemap.config.js:
+
+/** @type {import('next-sitemap').IConfig} */
+module.exports = {
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  generateRobotsTxt: true,
+  exclude: ['/api/*'],
+  changefreq: 'weekly',
+  priority: 0.7,
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: 'weekly',
+      priority: path === '/' ? 1.0 : 0.7,
+      lastmod: new Date().toISOString(),
+    };
+  },
+}
+
+
+Update package.json scripts:
+
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next-sitemap",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier -w .",
+    "typecheck": "tsc --noEmit",
+    "sitemap": "next-sitemap"
+  }
+}
+
+
+3) ESLint accessibility
+
+Extend ESLint config to include:
+
+{
+  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/recommended"],
+  "plugins": ["jsx-a11y"]
+}
+
+
+4) Security headers in next.config.js
+
+Wrap with optional bundle analyzer if present, else just export config.
+
+Add secure defaults:
+
+const securityHeaders = [
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'geolocation=(), microphone=(), camera=()' },
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      "img-src 'self' data: blob: https:",
+      "media-src 'self' https:",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+      "style-src 'self' 'unsafe-inline' https:",
+      "font-src 'self' https: data:",
+      "connect-src 'self' https:"
+    ].join('; ')
+  },
+];
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: { formats: ['image/avif', 'image/webp'] },
+  async headers() { return [{ source: '/(.*)', headers: securityHeaders }]; }
+};
+module.exports = nextConfig;
+
+
+5) Global SEO defaults using next-seo
+
+Create lib/seo.ts with helpers:
+
+import { ArticleJsonLd, NextSeoProps } from 'next-seo';
+export const defaultSeo: NextSeoProps = {
+  titleTemplate: '%s | SemiMassive',
+  defaultTitle: 'SemiMassive — Future Product Co-Dev',
+  description: 'We ship the next generation of product experiences before the market catches up.',
+  openGraph: {
+    type: 'website',
+    siteName: 'SemiMassive',
+    url: process.env.NEXT_PUBLIC_SITE_URL,
+  },
+  twitter: { cardType: 'summary_large_image' },
+  additionalLinkTags: [{ rel: 'icon', href: '/favicon.ico' }],
+};
+// JSON-LD helpers
+export const orgJsonLd = () => ({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'SemiMassive',
+  url: process.env.NEXT_PUBLIC_SITE_URL,
+  sameAs: ['https://www.linkedin.com/in/nickstrine'], // update later
+  logo: `${process.env.NEXT_PUBLIC_SITE_URL}/og.png`,
+});
+export const breadcrumbJsonLd = (items: { name: string; item: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((it, idx) => ({
+    '@type': 'ListItem', position: idx + 1, name: it.name, item: it.item
+  })),
+});
+export const creativeWorkJsonLd = (p: {
+  name: string; description: string; url: string; dateModified?: string;
+  image?: string; authorName?: string;
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: p.name,
+  description: p.description,
+  url: p.url,
+  image: p.image,
+  dateModified: p.dateModified,
+  author: p.authorName ? { '@type': 'Person', name: p.authorName } : undefined,
+});
+
+
+In app/layout.tsx, integrate defaults:
+
+import { NextSeo } from 'next-seo';
+import { defaultSeo } from '@/lib/seo';
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <NextSeo {...defaultSeo} />
+        {/* skip link + header */}
+        {children}
+        {/* footer */}
+      </body>
+    </html>
+  );
+}
+
+
+6) Canonicals & per-page metadata
+
+In each route (app/page.tsx, etc.), add a generateMetadata export that sets a canonical from NEXT_PUBLIC_SITE_URL and a descriptive title/description. Example for the homepage:
+
+import type { Metadata } from 'next';
+export async function generateMetadata(): Promise<Metadata> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const url = new URL('/', base).toString();
+  return {
+    title: 'SemiMassive — Future Product Co-Dev',
+    description: 'Co-development in AI, XR, and behaviour-driven systems.',
+    alternates: { canonical: url },
+    openGraph: { url, title: 'SemiMassive — Future Product Co-Dev', description: 'We ship the next generation of product experiences before the market catches up.' },
+    twitter: { card: 'summary_large_image' }
+  };
+}
+
+
+7) Sitemap/robots build
+
+Ensure pnpm build produces sitemap.xml and robots.txt at project root (/public emission is fine). Verify robots.txt contains the sitemap URL using the env base.
+
+8) Analytics hook (placeholder)
+
+Add a conditional Plausible snippet to app/layout.tsx that only renders in production and when NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set. (It’s fine to leave commented for now.)
+
+9) Done criteria
+
+App compiles and pnpm build generates sitemap.xml and robots.txt.
+
+ESLint runs with jsx-a11y and passes.
+
+Viewing page source shows canonical + OG/Twitter tags.
+
+No visual changes needed yet; this is a plumbing step.
+
+Show the updated file tree and key snippets when finished.
