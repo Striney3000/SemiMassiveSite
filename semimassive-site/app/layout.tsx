@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
-import Link from 'next/link';
-import Script from 'next/script';
 import { PageTransition } from '@/components/PageTransition';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import './globals.css';
 
 const inter = Inter({
@@ -10,6 +10,7 @@ const inter = Inter({
   weight: ['600', '700', '800'],
   variable: '--font-heading',
   display: 'swap',
+  preload: true,
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -54,56 +55,21 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
+      <head>
+        {isProd && plausibleDomain && (
+          <link rel="preconnect" href="https://plausible.io" />
+        )}
+      </head>
       <body>
-        <a href="#main-content" className="skip-link">
+        <a href="#content" className="skip-link">
           Skip to content
         </a>
         <div className="min-h-screen flex flex-col">
-          <header className="w-full py-6 px-6 md:px-12">
-            <nav aria-label="Main navigation">
-              <div className="max-w-7xl mx-auto flex items-center justify-between">
-                <div className="text-xl font-heading font-bold text-text-100">
-                  Semimassive
-                </div>
-                <ul className="flex gap-6 md:gap-8">
-                  <li>
-                    <Link
-                      href="/work"
-                      className="no-underline text-text-300 hover:text-text-100"
-                    >
-                      Work
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/services"
-                      className="no-underline text-text-300 hover:text-text-100"
-                    >
-                      Services
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/about"
-                      className="no-underline text-text-300 hover:text-text-100"
-                    >
-                      About
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </nav>
-          </header>
-          <main id="main-content" className="flex-1">
+          <Header />
+          <main id="content" role="main" className="flex-1">
             <PageTransition>{children}</PageTransition>
           </main>
-          <footer className="w-full py-12 px-6 md:px-12 border-t border-base-800">
-            <div className="max-w-7xl mx-auto">
-              <p className="text-text-300 text-base">
-                © {currentYear} Semimassive. All rights reserved.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
 
         {isProd && plausibleDomain ? (

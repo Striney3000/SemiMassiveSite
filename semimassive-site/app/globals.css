@@ -36,6 +36,7 @@
 
   html {
     @apply antialiased;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -147,6 +148,10 @@
 
   /* Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
     *,
     *::before,
     *::after {
@@ -154,6 +159,21 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+  
+  /* Enhanced focus rings for better visibility */
+  *:focus-visible {
+    outline: 2px solid var(--aqua-700);
+    outline-offset: 2px;
+  }
+  
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--aqua-700);
+    outline-offset: 2px;
   }
 }
 

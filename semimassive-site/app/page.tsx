@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { HeroCTA } from '@/components/HeroCTA';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -34,11 +35,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div>
-            <a href="#contact" className="btn-primary no-underline">
-              Book a 15-min intro
-            </a>
-          </div>
+          <HeroCTA />
 
           <div className="flex flex-wrap gap-4 pt-8">
             <span className="proof-chip">12M+ player launch</span>

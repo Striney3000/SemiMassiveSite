@@ -254,8 +254,64 @@ Preferred communication style: Simple, everyday language.
 - **Coverage**: node_modules, .next, .env*, .vercel, logs, build artifacts
 - **Rationale**: Prevents committing sensitive data and generated files
 
+### Stage 6: Production Polish (Added Oct 23, 2025)
+
+**Header & Footer Components**: Accessible navigation with large tap targets
+- **Implementation**: Separate Header.tsx and Footer.tsx components with semantic nav elements
+- **Features**:
+  - Accessible navigation with aria-current="page" for active links
+  - Large tap targets (min 44×44px) for touch devices
+  - Skip to content link (visible on focus) targeting #content
+  - Contact mailto link properly handled as regular <a> tag
+  - Responsive navigation with proper spacing
+- **Rationale**: Improves accessibility, SEO, and user experience across all devices
+
+**Error Handling**: 404 and error boundaries
+- **404 Page**: Custom not-found.tsx with friendly messaging and CTA back to Work page
+- **Error Boundary**: Client-side error.tsx with reset button and error digest display
+- **Rationale**: Improves user experience when things go wrong
+
+**Accessibility Enhancements**: WCAG compliance and keyboard navigation
+- **Focus Rings**: High-contrast aqua-700 focus rings with 2px outline-offset on all interactive elements
+- **Scroll Behavior**: Smooth scrolling enabled, auto in reduced-motion mode
+- **HTML Semantics**: lang="en" on <html>, role="main" on main content container
+- **Skip Link**: Keyboard-accessible skip to content functionality
+- **Rationale**: Ensures site is accessible to users with disabilities and meets WCAG AA standards
+
+**Breadcrumbs**: Navigation context on case study pages
+- **Implementation**: Breadcrumb component with Home → Work → Title navigation
+- **JSON-LD**: BreadcrumbList structured data for search engines
+- **Rationale**: Improves navigation context and SEO for case study pages
+
+**Performance Optimizations**: Font and image loading
+- **Fonts**: Preload option on Inter heading font, display: swap on both fonts
+- **Images**: Sizes attributes on Figure component for responsive images (100vw mobile, 80vw tablet, 1200px desktop)
+- **Preconnect**: Conditional preconnect to Plausible when analytics enabled
+- **Rationale**: Reduces CLS (Cumulative Layout Shift) and improves Core Web Vitals
+
+**Analytics Integration**: Event tracking for CTA interactions
+- **Implementation**: lib/analytics.ts with track() function for Plausible events
+- **Features**:
+  - Safe guard when Plausible not loaded (no errors)
+  - CTA component with trackingLocation prop
+  - HeroCTA component with hero location tracking
+- **Rationale**: Provides conversion tracking while respecting user privacy
+
+**Documentation**: Content editing and release checklists
+- **CONTENT_EDITING.md**: Comprehensive guide for managing case studies and content
+- **RELEASE_CHECKLIST.md**: Pre-deployment, quality, and post-launch checklist
+- **Rationale**: Enables non-technical users to manage content and ensures production readiness
+
+**Utilities**:
+- **lib/noindex.ts**: Helper for marking draft pages as noindex/nofollow
+- **lib/analytics.ts**: Plausible event tracking helper
+
+**Media Placeholders**: Favicon and OG image documentation
+- Created placeholder files documenting required favicon sizes (32x32, 180x180, 192x192) and OG image (1200x630)
+- **Note**: User must generate and add actual image files before production deployment
+
 ### Future Integration Points
 - Form handling suggested by forms plugin
 - Potential headless CMS integration for Work/Services/About content
 - Contact form backend (CTA present but not implemented)
-- Custom event tracking in Plausible (CTA clicks, scroll depth)
+- Custom event tracking in Plausible (CTA clicks, scroll depth) - now wired and ready to use

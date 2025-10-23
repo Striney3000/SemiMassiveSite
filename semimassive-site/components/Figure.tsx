@@ -9,6 +9,7 @@ interface FigureProps {
   height?: number;
   priority?: boolean;
   video?: boolean;
+  sizes?: string;
 }
 
 export function Figure({
@@ -19,6 +20,7 @@ export function Figure({
   height = 800,
   priority = false,
   video = false,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px',
 }: FigureProps) {
   return (
     <figure className="my-8 md:my-12">
@@ -41,6 +43,7 @@ export function Figure({
             width={width}
             height={height}
             priority={priority}
+            sizes={sizes}
             className="w-full h-auto"
           />
         )}

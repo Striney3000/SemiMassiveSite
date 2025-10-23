@@ -9,6 +9,7 @@ import { Figure } from '@/components/Figure';
 import { Snapshot } from '@/components/Snapshot';
 import { CTA } from '@/components/CTA';
 import { ProgressBar } from '@/components/ProgressBar';
+import { Breadcrumb } from '@/components/Breadcrumb';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -116,6 +117,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
       />
 
       <Section className="max-w-5xl mx-auto" animate={false}>
+        <Breadcrumb
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Work', href: '/work' },
+            { name: meta.title, href: `/work/${slug}` },
+          ]}
+        />
+        
         <header className="space-y-6 mb-12">
           <div className="space-y-2">
             {meta.client && meta.year && (

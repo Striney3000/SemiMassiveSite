@@ -1,0 +1,1 @@
+Placeholder for apple-touch-icon.png - Generate a 180x180 PNG file with your logo

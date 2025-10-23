@@ -30,8 +30,7 @@ export default async function WorkPage() {
         <header className="space-y-4">
           <h1 className="text-text-100">Work</h1>
           <p className="text-text-300 text-xl md:text-2xl max-w-3xl">
-            Case studies and project showcases. Explore our work in AI, XR, and
-            behaviour-driven systems.
+            Selected case studies from AI, XR, and behaviour-driven product work.
           </p>
         </header>
 

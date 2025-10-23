@@ -1,11 +1,15 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/analytics';
 
 interface CTAProps {
   href: string;
   children: React.ReactNode;
   variant?: 'primary' | 'secondary';
   external?: boolean;
+  trackingLocation?: string;
 }
 
 export function CTA({
@@ -13,6 +17,7 @@ export function CTA({
   children,
   variant = 'primary',
   external = false,
+  trackingLocation,
 }: CTAProps) {
   const baseStyles =
     'inline-flex items-center justify-center px-8 py-4 rounded-lg font-heading font-semibold text-lg transition-all duration-soft ease-out-smooth min-h-[56px]';
@@ -24,6 +29,12 @@ export function CTA({
 
   const className = `${baseStyles} ${variantStyles}`;
 
+  const handleClick = () => {
+    if (trackingLocation) {
+      track('CTA Click', { location: trackingLocation });
+    }
+  };
+
   if (external) {
     return (
       <a
@@ -31,6 +42,7 @@ export function CTA({
         className={className}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={handleClick}
       >
         {children}
       </a>
@@ -38,7 +50,7 @@ export function CTA({
   }
 
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} onClick={handleClick}>
       {children}
     </Link>
   );
