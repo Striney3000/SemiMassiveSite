@@ -1,0 +1,85 @@
+Stage 9 — Rename Work → Solutions (nav), route → /interventions, redirects, cards show Problem→Intervention→Result
+
+Paste into Replit AI:
+
+Update the information architecture exactly as follows:
+
+Goal
+
+Navigation label Solutions
+
+Listing route at /interventions
+
+Detail pages at /interventions/[slug]
+
+301 redirects from /work and /solutions → /interventions
+
+Listing page headline: “Problems we solved”
+
+Cards display Problem → Intervention → Result (short).
+
+1) Routes & folders
+
+Create folder /app/interventions/.
+
+Move /app/work/page.tsx → /app/interventions/page.tsx.
+
+Move /app/work/[slug]/page.tsx → /app/interventions/[slug]/page.tsx.
+
+Update all internal imports/paths accordingly.
+
+Remove the old /work folder after redirects are in place.
+
+2) Navigation label
+
+In Header.tsx, change the “Work” nav item label to Solutions and point it to /interventions.
+
+Ensure aria-current="page" works on /interventions*.
+
+3) Redirects (Next config)
+
+In next.config.js, add:
+
+async redirects() {
+  return [
+    { source: '/work', destination: '/interventions', permanent: true },
+    { source: '/work/:slug*', destination: '/interventions/:slug*', permanent: true },
+    { source: '/solutions', destination: '/interventions', permanent: true },
+    { source: '/solutions/:slug*', destination: '/interventions/:slug*', permanent: true },
+  ];
+}
+
+
+4) Content model tweaks (frontmatter)
+
+In /lib/types.ts, adjust CaseStudyFrontmatter:
+
+Rename the exported type to InterventionMeta (keep the schema name if easier), or keep the same name but allow:
+
+schemaType: z.enum(['Intervention', 'CaseStudy']).default('Intervention'),
+
+
+Add three optional short strings for listing cards:
+
+problem: z.string().optional(),
+intervention: z.string().optional(),
+result: z.string().optional(),
+
+
+In existing MDX files (xdefiant-*.mdx, atlas-*.mdx), set:
+
+schemaType: "Intervention"
+problem: "Early-session drop from cognitive overload"
+intervention: "Single path to first win; peripheral feedback channels"
+result: "20%+ longer onboarding sessions across 12M+ launch"
+
+
+and
+
+schemaType: "Intervention"
+problem: "Mid-experience fatigue in 45-min spatial narrative"
+intervention: "Diegetic wayfinding; curiosity-led choices; 90–120s micro-goals"
+result: "80% completion with reduced disorientation"
+
+
+(Keep the bodies as-is.)

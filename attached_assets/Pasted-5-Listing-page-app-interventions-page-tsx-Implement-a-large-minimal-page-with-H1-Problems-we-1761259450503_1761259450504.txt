@@ -1,0 +1,114 @@
+5) Listing page /app/interventions/page.tsx
+
+Implement a large, minimal page with:
+
+H1: “Problems we solved”
+
+Brief subline (≤ 18 words): “Surgical interventions that change momentum inside complex products and teams.”
+
+Fetch getAllWork() (keep util name if already used) and map to cards.
+
+Card layout (large, tap-friendly):
+
+Top line (muted): {meta.client} · {meta.year} (hide if missing)
+
+Title: meta.title
+
+3-line Problem → Intervention → Result block using the new frontmatter fields; if a field is missing, derive short snippets from summary/impact[0].
+
+Pillar chips (meta.pillars) in a subdued row.
+
+Whole card links to /interventions/{slug}. Add aria-label="Open solution: {title}".
+
+Add generateMetadata() with canonical to /interventions and a meta description:
+“SemiMassive solutions: targeted product interventions in AI, XR, and behaviour systems.”
+
+Render a compact breadcrumb (Home → Solutions).
+
+6) Detail route /app/interventions/[slug]/page.tsx
+
+Ensure path/links are updated from /work → /interventions.
+
+Above-the-fold section shows:
+
+Title, summary
+
+A compact three-column Problem / Intervention / Result row when present
+
+Metric row from impact
+
+Keep the MDX body structure unchanged (Snapshot, Context, Constraint → Breakthrough, etc.)
+
+Export generateStaticParams using the new path.
+
+generateMetadata():
+
+Canonical: ${BASE_URL}/interventions/${slug}
+
+OG/Twitter title/description from frontmatter
+
+JSON-LD:
+
+@type: CreativeWork (or “HowTo” if you prefer later), name, description, dateModified, image, url
+
+BreadcrumbList: Home → Solutions → {Title}
+
+7) Nav & internal links
+
+Update any remaining references to /work:
+
+Homepage featured cards → /interventions/{slug}
+
+Footer links → Solutions → /interventions
+
+Breadcrumb generators and header active-state logic
+
+8) Redirects & sitemap sanity
+
+Confirm next.config.js redirects() includes:
+
+{ source: '/work', destination: '/interventions', permanent: true },
+{ source: '/work/:slug*', destination: '/interventions/:slug*', permanent: true },
+{ source: '/solutions', destination: '/interventions', permanent: true },
+{ source: '/solutions/:slug*', destination: '/interventions/:slug*', permanent: true },
+
+
+Ensure next-sitemap picks up /interventions pages. If your content loader path is unchanged, it should. Rebuild and confirm sitemap.xml lists the new URLs.
+
+9) Copy tone tweaks
+
+Homepage card section heading: change from “Featured work” → “Selected solutions”.
+
+Any “case study” mentions → “solution” or “intervention”.
+
+10) Tests update
+
+Rename or add a smoke test: __tests__/solutions.test.tsx
+
+import Solutions from '@/app/interventions/page';
+import { render, screen } from '@testing-library/react';
+test('renders Solutions heading', () => {
+  render(<Solutions />);
+  expect(screen.getByRole('heading', { name: /Problems we solved/i })).toBeInTheDocument();
+});
+
+
+Update any route imports in existing tests from /work → /interventions.
+
+11) Accessibility & focus
+
+Ensure the Solutions nav item receives aria-current="page" when route starts with /interventions.
+
+Each card link must be a single, obvious focusable element with visible focus ring (aqua tiered).
+
+12) Done criteria
+
+/interventions renders the listing with Problem→Intervention→Result on each card.
+
+/interventions/{slug} renders detail pages with the compact triad row and MDX body.
+
+All old /work and /solutions URLs 301 to /interventions.
+
+Sitemap and canonical tags reference /interventions.
+
+Tests pass; build succeeds.
