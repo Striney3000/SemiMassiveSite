@@ -151,18 +151,44 @@ Preferred communication style: Simple, everyday language.
 - **Implementation**: Privacy-focused analytics ready to enable in production
 - **Note**: Uncomment in layout.tsx and set NEXT_PUBLIC_PLAUSIBLE_DOMAIN when ready
 
-### Development Tooling
+### Development Tooling (Updated Oct 23, 2025)
 
 **Code Quality**:
 - ESLint with Next.js core web vitals rules and jsx-a11y accessibility plugin
 - Prettier for consistent code formatting
 - TypeScript type checking in CI/CD pipelines
 
+**Testing**: Vitest + React Testing Library
+- **Implementation**: Smoke tests in `__tests__/` directory with jsdom environment
+- **Configuration**: vitest.config.ts with React plugin and path aliases
+- **Setup**: Extended matchers from @testing-library/jest-dom
+- **Rationale**: Fast, modern testing framework compatible with Next.js and TypeScript
+
+**CI/CD**: GitHub Actions
+- **Workflow**: `.github/workflows/ci.yml` runs on every push and PR
+- **Steps**: Typecheck → Lint → Build → Test
+- **Environment**: Ubuntu latest with Node 20 and pnpm 9
+- **Rationale**: Automated quality checks ensure code integrity before merging
+
+**Analytics**: Plausible (opt-in)
+- **Implementation**: Conditional script tag in layout.tsx
+- **Conditions**: Only loads in production when NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set
+- **Rationale**: Privacy-focused analytics without tracking cookies
+
+**Bundle Analysis**: @next/bundle-analyzer (opt-in)
+- **Usage**: Run `ANALYZE=true pnpm build` to inspect bundle sizes
+- **Rationale**: Helps identify and optimize large dependencies
+
 **Scripts**:
 - `dev`: Development server
-- `build`: Production build
+- `build`: Production build + sitemap generation
+- `start`: Production server
+- `lint`: ESLint checks
 - `format`: Prettier formatting across all files
-- `typecheck`: Type validation without emission
+- `typecheck`: TypeScript type validation
+- `test`: Run tests in watch mode
+- `test:ui`: Run tests with Vitest UI
+- `sitemap`: Generate sitemap and robots.txt
 
 ### Performance Considerations
 
@@ -212,9 +238,24 @@ Preferred communication style: Simple, everyday language.
 - **Google Fonts API**: Inter and Plus Jakarta Sans families
 - Delivered via Next.js font optimization system (no direct API dependency)
 
+### Repository Hygiene (Added Oct 23, 2025)
+
+**Environment Variables**: .env.example template
+- **Template**: Documents required and optional environment variables
+- **Security**: .gitignore excludes all .env* files (except .env.example)
+- **Variables**: NEXT_PUBLIC_SITE_URL (required), NEXT_PUBLIC_PLAUSIBLE_DOMAIN (optional)
+
+**Documentation**: README.md
+- **Content**: Quick start, content management, scripts, accessibility, tech stack
+- **Audience**: Developers and content editors
+- **Maintenance**: Keep updated with major architectural changes
+
+**Git Configuration**: .gitignore
+- **Coverage**: node_modules, .next, .env*, .vercel, logs, build artifacts
+- **Rationale**: Prevents committing sensitive data and generated files
+
 ### Future Integration Points
-- MDX support suggested by typography plugin and prose.css
 - Form handling suggested by forms plugin
-- Potential CMS integration for Work/Services/About content
-- Analytics integration (not yet implemented)
+- Potential headless CMS integration for Work/Services/About content
 - Contact form backend (CTA present but not implemented)
+- Custom event tracking in Plausible (CTA clicks, scroll depth)
