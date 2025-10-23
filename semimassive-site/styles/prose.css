@@ -1,0 +1,27 @@
+/* Prose styles for MDX content - will be used in later stages */
+
+.prose {
+  @apply text-text-100;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-heading text-text-100;
+}
+
+.prose a {
+  @apply text-aqua-400 underline decoration-aqua-400/30;
+  @apply hover:text-aqua-500 hover:decoration-aqua-500/50;
+}
+
+.prose strong {
+  @apply text-text-100 font-semibold;
+}
+
+.prose code {
+  @apply bg-base-900 text-aqua-400 px-1.5 py-0.5 rounded;
+}

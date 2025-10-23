@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Canvas - Warm Dark Neutral */
+  --color-base-950: #0f0e0d;
+  --color-base-900: #1a1816;
+  --color-base-800: #2a2622;
+
+  /* Text */
+  --color-text-100: #f5f4f2;
+  --color-text-300: #a8a49e;
+
+  /* Accent - Aqua Electric (tiered states) */
+  --aqua-400: #5dd9c1;
+  --aqua-500: #3fcfb4;
+  --aqua-600: #2ab89d;
+  --aqua-700: #1a9d84;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-quick: 140ms;
+  --dur-soft: 260ms;
+  --dur-slow: 420ms;
+}
+
+@layer base {
+  * {
+    @apply border-base-800;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-base-950 text-text-100 font-body;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-semibold text-text-100;
+  }
+
+  h1 {
+    font-size: 64px;
+    line-height: 68px;
+  }
+
+  h2 {
+    font-size: 44px;
+    line-height: 52px;
+  }
+
+  h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  h4 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  h5 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  h6 {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  /* Responsive typography - breathe on smaller screens */
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px;
+      line-height: 26px;
+    }
+
+    h1 {
+      font-size: 40px;
+      line-height: 48px;
+    }
+
+    h2 {
+      font-size: 32px;
+      line-height: 40px;
+    }
+
+    h3 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  /* Link and button states with tiered aqua accent */
+  a {
+    @apply text-aqua-400 transition-colors duration-soft ease-out-smooth;
+    @apply underline decoration-aqua-400/30;
+  }
+
+  a:hover {
+    @apply text-aqua-500 decoration-aqua-500/50;
+  }
+
+  a:active {
+    @apply text-aqua-600;
+  }
+
+  a:focus-visible {
+    @apply outline-2 outline-offset-2 outline-aqua-700 rounded-sm;
+  }
+
+  /* Large tap targets for accessibility */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Skip to content link */
+  .skip-link {
+    @apply absolute left-4 top-4 z-50;
+    @apply bg-base-900 text-text-100 px-4 py-2 rounded;
+    @apply -translate-y-20 opacity-0;
+    @apply transition-all duration-soft ease-out-smooth;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0 opacity-100;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* CTA Button with tiered aqua states */
+  .btn-primary {
+    @apply inline-flex items-center justify-center;
+    @apply px-8 py-4 rounded-lg;
+    @apply bg-aqua-400 text-base-950;
+    @apply font-heading font-semibold text-lg;
+    @apply transition-all duration-soft ease-out-smooth;
+    @apply hover:bg-aqua-500 hover:shadow-lg hover:shadow-aqua-500/20;
+    @apply active:bg-aqua-600 active:scale-[0.98];
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700;
+    min-height: 56px;
+  }
+
+  /* Proof chips */
+  .proof-chip {
+    @apply inline-flex items-center justify-center;
+    @apply px-6 py-3 rounded-full;
+    @apply bg-base-900 border border-base-800;
+    @apply text-text-100 font-body font-medium;
+    @apply text-base md:text-lg;
+  }
+}
