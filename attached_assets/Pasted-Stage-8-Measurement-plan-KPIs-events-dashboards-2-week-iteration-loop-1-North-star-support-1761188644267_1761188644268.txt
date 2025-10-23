@@ -1,0 +1,199 @@
+Stage 8 — Measurement plan (KPIs, events, dashboards, 2-week iteration loop)
+1) North-star & supporting metrics
+
+North-star: Intro bookings / 100 visitors (goal: 3–5 / 100 within 4 weeks)
+
+Supporting:
+
+Homepage → Work click-through rate (CTR) (target: 35%+)
+
+Case-study “read depth” ≥ 60% (target: 40%+ of readers)
+
+Time to first CTA click (TTFC) on homepage (target: ≤ 25s median)
+
+Source mix: Organic ≥ 25%, Direct ≤ 40%, Social/Referrals 35%+
+
+2) Plausible goals & events (copy-paste)
+
+You already have Plausible wired. Add named events so we can read funnels.
+
+Create/extend /lib/analytics.ts:
+
+export function track(event: string, props?: Record<string, any>) {
+  if (typeof window !== 'undefined' && (window as any).plausible) {
+    (window as any).plausible(event, { props });
+  }
+}
+
+
+Hook key events (examples):
+
+Hero CTA (homepage)
+
+// in Hero button onClick
+track('CTA Click', { location: 'hero', page: 'home' });
+
+
+Footer CTA
+
+track('CTA Click', { location: 'footer', page: 'global' });
+
+
+Work card click
+
+track('Work Opened', { slug, card_position: index + 1 });
+
+
+Case-study read milestones (25/50/75/90%)
+Create a small hook useScrollMilestones.ts and fire once per milestone:
+
+import { useEffect, useRef } from 'react';
+import { track } from '@/lib/analytics';
+
+export function useScrollMilestones(slug: string) {
+  const fired = useRef(new Set<number>());
+  useEffect(() => {
+    function onScroll() {
+      const h = document.documentElement;
+      const pct = Math.round((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100);
+      [25,50,75,90].forEach(m => {
+        if (pct >= m && !fired.current.has(m)) {
+          fired.current.add(m);
+          track('Read Milestone', { slug, percent: m });
+        }
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [slug]);
+}
+
+
+Call it near the top of /work/[slug]/page.tsx client component wrapper.
+
+Time to First CTA Click (TTFC)
+
+let t0 = performance.now();
+export function trackFirstCta(location: string, page: string) {
+  const ms = Math.round(performance.now() - t0);
+  track('TTFC', { ms, location, page });
+}
+
+
+Use this in your primary CTA’s onClick (only the first click should fire this; guard with a boolean).
+
+Outbound to Calendly (if using a link):
+
+<a href="https://calendly.com/..." onClick={() => track('Calendly Open', { page: 'home' })}>
+  Book a 15-min intro
+</a>
+
+3) Define Plausible goals (UI)
+
+In Plausible dashboard:
+
+Add Custom Goals by matching event names:
+
+CTA Click
+
+Calendly Open
+
+Work Opened
+
+Read Milestone (Goal if percent ≥ 75)
+
+TTFC (view in events; goal optional)
+
+Create a Conversion Goal for Calendly Open (proxy for booking if you don’t have Calendly confirmation webhook). If you embed Calendly, enable its completion event tracking later.
+
+4) Segments to create (Plausible “Filters” you’ll reuse)
+
+Source/Medium: source=linkedin, source=google, source=(direct)
+
+Device: device=mobile vs desktop
+
+Landing page: / vs /work/*
+
+Locale/timezone: AU vs non-AU (sanity check for recruiter traffic)
+
+5) Dashboards to save
+
+Acquisition & Conversion: Visitors, CTA Click rate, Calendly Open rate by source.
+
+Content Quality: Work Opened CTR from home, read milestones distribution (25/50/75/90).
+
+Time-based: TTFC median by device; peaks by hour/day.
+
+6) Two-week experiment plan (low effort, high signal)
+
+Ship two changes per week, run for 7 days each, compare deltas.
+
+Week 1
+
+Hero copy A/B (serial, simple):
+
+A: “We ship the next generation of product experiences before the market catches up.”
+
+B: “Co-develop future product capabilities in AI, XR, and behaviour systems.”
+
+Success: +20% in CTA Click on home, no drop in Work Opened.
+
+Implementation: Just change headline for 7 days; annotate in a CHANGES.md.
+
+Featured work order:
+
+Put XDefiant first, Atlas second (or vice-versa).
+
+Success: +15% in Work Opened for position #1, steady read ≥ 50%.
+
+Week 2
+3. CTA label experiment:
+
+A: “Book a 15-min intro”
+
+B: “Discuss your next product sprint”
+
+Success: +15% Calendly Open, TTFC median ↓ 20%.
+
+Add a 1-page PDF sampler link in hero (secondary CTA)
+
+Track PDF Download event.
+
+Success: +10% combined CTA/Download without cannibalising bookings.
+
+(Run only one change at a time if traffic is low; otherwise you won’t get clean reads.)
+
+7) Guardrails & failure states
+
+If CTA Click rises but Calendly Open doesn’t, the button likely scrolls to a hidden area or feels ambiguous. Add an in-page Calendly embed on the homepage and re-test.
+
+If read depth < 30%, your case-study Snapshot is too long or the hero above the fold doesn’t clarify value. Tighten Snapshot to 3 bullets max.
+
+If TTFC > 45s, the hero doesn’t promise a concrete outcome. Try benefit-first microcopy under the H1.
+
+8) Quick weekly review ritual (30 min)
+
+5 min: Acquisition mix (any surprises? spikes?)
+
+10 min: Funnel: Home → Work Opened → Read Milestone 75 → CTA Click → Calendly Open
+
+10 min: Device split (is mobile lagging? Likely CTA placement/size)
+
+5 min: Decide the next week’s 1–2 changes; log in CHANGES.md.
+
+9) Optional: Hotjar/Clarity (only if needed)
+
+If you want qualitative insight, add a privacy-respecting session tool later for a short window (7 days) to confirm where attention drops on the homepage. Don’t leave it on forever.
+
+10) Success thresholds to graduate from “MVP”
+
+500+ unique visitors
+
+Calendly Open conversion ≥ 3% overall, ≥ 4% on desktop
+
+Case-study read milestone (≥ 75%) for 40% of readers
+
+Home → Work CTR ≥ 35%
+
+Returning visitors ≥ 20%
