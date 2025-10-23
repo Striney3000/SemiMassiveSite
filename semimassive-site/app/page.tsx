@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { HeroCTA } from '@/components/HeroCTA';
+import { getRobotsForEnvironment } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -10,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       'Co-development in AI, XR, and behaviour-driven systems. We ship the next generation of product experiences before the market catches up.',
     alternates: { canonical: url },
+    robots: getRobotsForEnvironment(),
     openGraph: {
       url,
       title: 'SemiMassive — Future Product Co-Dev',

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllWork, getWorkBySlug, compileMdx } from '@/lib/mdx';
 import { creativeWorkJsonLd, breadcrumbJsonLd } from '@/lib/seo';
+import { getRobotsForEnvironment } from '@/lib/metadata';
 import { Prose } from '@/components/Prose';
 import { Section } from '@/components/Section';
 import { Metric } from '@/components/Metric';
@@ -14,6 +15,14 @@ import { Breadcrumb } from '@/components/Breadcrumb';
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
+
+// ISR: Revalidate case study pages every 24 hours
+// This enables Incremental Static Regeneration for fresh content:
+// - Pages are pre-built at build time
+// - After 24h, next request triggers background regeneration
+// - Users see cached version while fresh version generates
+// - To force immediate update: edit MDX → commit → Vercel rebuild
+export const revalidate = 86400; // 24 hours in seconds
 
 export async function generateStaticParams() {
   const allWork = await getAllWork();
@@ -45,6 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: work.meta.title,
     description: work.meta.summary,
     alternates: { canonical: url },
+    robots: getRobotsForEnvironment(),
     openGraph: {
       url,
       title: work.meta.title,

@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { getRobotsForEnvironment } from '@/lib/metadata';
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found',
   description: 'The page you are looking for could not be found.',
+  robots: getRobotsForEnvironment(),
 };
 
 export default function NotFound() {

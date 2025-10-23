@@ -22,7 +22,7 @@ export function Footer() {
     <footer className="w-full py-12 px-6 md:px-12 border-t border-base-800">
       <div className="max-w-7xl mx-auto space-y-8">
         <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap gap-4 md:gap-6" role="list">
+          <ul className="flex flex-wrap gap-4 md:gap-6">
             {navItems.map((item) => (
               <li key={item.href}>
                 {item.isExternal ? (

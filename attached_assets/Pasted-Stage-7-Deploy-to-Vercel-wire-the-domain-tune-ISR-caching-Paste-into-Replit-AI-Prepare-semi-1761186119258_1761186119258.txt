@@ -1,0 +1,145 @@
+Stage 7 — Deploy to Vercel, wire the domain, tune ISR & caching
+
+Paste into Replit AI:
+
+Prepare semimassive-site for production deployment on Vercel with GitHub integration, correct domains, ISR, and sensible cache headers.
+
+1) Production build sanity
+
+Run: pnpm typecheck && pnpm lint && pnpm build
+
+Confirm the build completes with no warnings that would break ISR.
+
+2) Vercel project (instructions output)
+
+Generate step-by-step CLI instructions for:
+
+Installing Vercel CLI (pnpm dlx vercel@latest)
+
+Running vercel → create project, link to GitHub repo, set framework = Next.js, root = project root.
+
+Running vercel pull to fetch envs locally (optional).
+
+Running vercel deploy for preview, and vercel deploy --prod for production (once domain is set).
+
+3) Environment variables
+
+Ensure the app reads:
+
+NEXT_PUBLIC_SITE_URL=https://semimassive.com (or your chosen domain)
+
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=semimassive.com (optional)
+
+Add instructions to set these in Vercel Project → Settings → Environment Variables (Production + Preview).
+
+4) Domain wiring
+
+Output instructions for setting a custom domain in Vercel:
+
+Vercel → Project → Domains → Add semimassive.com (and www.semimassive.com).
+
+If the domain is on another registrar, add/verify A/ALIAS or CNAME via Vercel’s prompts.
+
+Set primary domain; add redirect from www → apex (or vice-versa).
+
+Confirm next-sitemap and canonical URLs are using the primary domain.
+
+5) ISR & caching defaults
+
+In case study pages (work [slug]), ensure:
+
+Export revalidate = 86400 (24h) at the route level or set fetch revalidate for content loader if using dynamic fetches.
+
+Example:
+
+export const revalidate = 86400;
+
+
+For static assets, ensure Next/Image uses optimal formats and add a long Cache-Control for /public assets via Vercel headers config (create vercel.json if needed):
+
+{
+  "headers": [
+    {
+      "source": "/(.*)\\.(png|jpg|jpeg|webp|avif|svg|mp4)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}
+
+
+(If using next.config.js headers() already, add a similar rule there instead of vercel.json.)
+
+6) Stale-while-revalidate guidance (doc in code)
+
+Add a comment block in the work route explaining how to trigger fresh content:
+
+Edit MDX → commit → Vercel rebuild updates HTML immediately.
+
+For any data fetched with revalidate, the first request after 24h regenerates the page in the background (ISR).
+
+7) Preview vs Production
+
+Ensure OG image route works on preview too. Provide an example preview URL format and test: /api/og?title=Preview&subtitle=Check.
+
+Confirm robots.txt in preview disallows indexing:
+
+If not already, create a preview override by checking VERCEL_ENV:
+
+When VERCEL_ENV !== 'production', add noindex in generateMetadata() AND serve a robots.txt that disallows all (document how to do this quickly, e.g., if (process.env.VERCEL_ENV !== 'production') then { robots: { index: false, follow: false } }).
+
+8) Redirects
+
+Add 301 redirect from /index → /, and optionally http:// → https:// handled by Vercel automatically.
+
+If migrating from old paths later, show how to add entries in next.config.js redirects():
+
+async redirects() {
+  return [
+    { source: '/project/xdefiant', destination: '/work/xdefiant-onboarding', permanent: true },
+  ];
+}
+
+
+9) Post-deploy checks (output a checklist)
+
+After vercel deploy --prod, verify:
+
+Canonical URLs reference the production domain.
+
+sitemap.xml lists all work pages with correct lastmod.
+
+robots.txt contains the correct sitemap URL.
+
+OG/Twitter cards render (test in Twitter/X card validator and Facebook debugger).
+
+Lighthouse (mobile): Perf ≥ 90, A11y ≥ 95, Best Practices ≥ 95, SEO ≥ 95.
+
+Plausible receives pageview and “CTA Click” events.
+
+10) Optional CDN/perf niceties
+
+Add prefetch for nav links (Next.js prefetch on <Link> is automatic when visible; leave default).
+
+Mark large above-the-fold images with priority.
+
+Ensure no blocking scripts/styles; only necessary fonts are loaded.
+
+11) Output:
+
+Provide the exact CLI commands to:
+
+Install Vercel CLI
+
+Link project
+
+Set envs
+
+Deploy preview
+
+Add domain
+
+Deploy production
+
+Provide the final list of files modified/added (vercel.json or next.config.js headers) and any route-level export const revalidate = 86400 you inserted.

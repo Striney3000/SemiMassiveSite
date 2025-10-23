@@ -26,7 +26,7 @@ export function Header() {
             Semimassive
           </Link>
           
-          <ul className="flex gap-4 md:gap-6 lg:gap-8" role="list">
+          <ul className="flex gap-4 md:gap-6 lg:gap-8">
             {navItems.map((item) => {
               const isActive = 
                 item.href === '/' 

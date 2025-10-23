@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getRobotsForEnvironment } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -9,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       'Learn more about SemiMassive, our team, and our approach to co-developing the next generation of product experiences.',
     alternates: { canonical: url },
+    robots: getRobotsForEnvironment(),
     openGraph: {
       url,
       title: 'About | SemiMassive',

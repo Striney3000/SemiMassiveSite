@@ -47,6 +47,22 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Redirect /index to / (if needed)
+      {
+        source: '/index',
+        destination: '/',
+        permanent: true,
+      },
+      // Example: Add old URL redirects when migrating content
+      // {
+      //   source: '/project/:slug',
+      //   destination: '/work/:slug',
+      //   permanent: true,
+      // },
+    ];
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);
