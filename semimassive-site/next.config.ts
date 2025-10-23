@@ -49,18 +49,31 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Redirect /index to / (if needed)
       {
         source: '/index',
         destination: '/',
         permanent: true,
       },
-      // Example: Add old URL redirects when migrating content
-      // {
-      //   source: '/project/:slug',
-      //   destination: '/work/:slug',
-      //   permanent: true,
-      // },
+      {
+        source: '/work',
+        destination: '/interventions',
+        permanent: true,
+      },
+      {
+        source: '/work/:slug*',
+        destination: '/interventions/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/solutions',
+        destination: '/interventions',
+        permanent: true,
+      },
+      {
+        source: '/solutions/:slug*',
+        destination: '/interventions/:slug*',
+        permanent: true,
+      },
     ];
   },
 };

@@ -8,7 +8,7 @@ export function Header() {
 
   const navItems = [
     { href: '/', label: 'Home', isExternal: false },
-    { href: '/work', label: 'Work', isExternal: false },
+    { href: '/interventions', label: 'Solutions', isExternal: false },
     { href: '/services', label: 'Services', isExternal: false },
     { href: '/about', label: 'About', isExternal: false },
     { href: 'mailto:hello@semimassive.com', label: 'Contact', isExternal: true },
