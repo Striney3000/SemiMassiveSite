@@ -2,7 +2,18 @@
 
 ## Overview
 
-Semimassive is a modern marketing website for a product development consultancy specializing in AI, XR, and behavior-driven systems. The site showcases the company's expertise in building next-generation product experiences using Next.js 15 and React 18. It features a minimal, high-performance architecture, warm dark aesthetics with aqua accents, and a focus on polished user experience. The site includes a homepage, dynamic case studies, and placeholder pages for services and company information.
+Semimassive is a modern marketing website for a product development consultancy specializing in AI, XR, and behavior-driven systems. The site showcases the company's expertise in building next-generation product experiences using Next.js 15 and React 18. It features a minimal, high-performance architecture, warm dark aesthetics with aqua accents, and a focus on polished user experience. The site includes a homepage, Solutions showcase at `/interventions` (displaying problem-intervention-result case studies), and placeholder pages for services and company information.
+
+### Recent Changes (October 2025)
+
+**Information Architecture Refactoring**: Renamed "Work" to "Solutions" with route migration from `/work` to `/interventions`:
+- Navigation label updated to "Solutions" 
+- Route structure: `/interventions` (listing) and `/interventions/[slug]` (detail pages)
+- 301 redirects implemented for `/work` and `/solutions` → `/interventions`
+- Content model enhanced with Problem → Intervention → Result (PIR) framework
+- Card display shows three-line PIR structure for each solution
+- Detail pages include compact PIR row above metrics
+- All internal links, breadcrumbs, and metadata updated to use `/interventions`
 
 ## User Preferences
 
@@ -17,7 +28,7 @@ Preferred communication style: Simple, everyday language.
 -   **Typography**: Google Fonts (Inter for headings, Plus Jakarta Sans for body) via Next.js font optimization.
 -   **Design System**: Warm dark palette with aqua electric accents, three-tier motion system (Framer Motion), and tiered interaction states.
 -   **Component Structure**: Root layout for consistent header/footer and accessibility, individual route modules, and dedicated content components (e.g., Section, Prose, Metric, Figure, Snapshot, CTA).
--   **MDX-Based Content**: File-based system for case studies using MDX with Zod-validated frontmatter, enabling type-safe, git-versioned content.
+-   **MDX-Based Content**: File-based system for solutions/interventions using MDX with Zod-validated frontmatter (including optional `problem`, `intervention`, `result` fields), enabling type-safe, git-versioned content. Schema supports both `Intervention` and `CaseStudy` types.
 
 ### Backend/DevOps
 
@@ -72,7 +83,7 @@ Preferred communication style: Simple, everyday language.
 -   **Event Tracking System**: Comprehensive analytics tracking for conversion optimization
     -   **TTFC (Time to First CTA Click)**: Measures time from page load to first CTA interaction, tracked per page with automatic reset on navigation
     -   **CTA Click Tracking**: All call-to-action buttons (hero, footer, content) tracked with location and page context
-    -   **Work Card Tracking**: Case study card clicks tracked with position data for engagement analysis
+    -   **Solution Card Tracking**: Solution card clicks tracked with position data for engagement analysis (event: "Solution Opened")
     -   **Scroll Milestone Tracking**: Case study read depth tracked at 25%, 50%, 75%, and 90% scroll points
 -   **Global Tracking Infrastructure**: 
     -   `lib/analytics.ts`: Core tracking functions with page-specific state management
