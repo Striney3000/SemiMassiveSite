@@ -21,8 +21,8 @@ export default function NotFound() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link href="/work" className="btn-primary no-underline">
-            View Our Work
+          <Link href="/interventions" className="btn-primary no-underline">
+            View Our Solutions
           </Link>
           <Link
             href="/"
