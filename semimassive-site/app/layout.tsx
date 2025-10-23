@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
+import Link from 'next/link';
 import Script from 'next/script';
 import { PageTransition } from '@/components/PageTransition';
 import './globals.css';
@@ -66,28 +67,28 @@ export default function RootLayout({
                 </div>
                 <ul className="flex gap-6 md:gap-8">
                   <li>
-                    <a
+                    <Link
                       href="/work"
                       className="no-underline text-text-300 hover:text-text-100"
                     >
                       Work
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       href="/services"
                       className="no-underline text-text-300 hover:text-text-100"
                     >
                       Services
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       href="/about"
                       className="no-underline text-text-300 hover:text-text-100"
                     >
                       About
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

@@ -162,7 +162,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           )}
         </header>
 
-        <Prose className="mt-12">{mdxContent}</Prose>
+        <div className="mt-12">{mdxContent as React.ReactNode}</div>
       </Section>
     </div>
   );

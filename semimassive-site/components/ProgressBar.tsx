@@ -17,6 +17,11 @@ export function ProgressBar({ show = true }: ProgressBarProps) {
     restDelta: 0.001,
   });
 
+  const opacitySpring = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+  });
+
   if (!show) return null;
 
   return (
@@ -30,13 +35,7 @@ export function ProgressBar({ show = true }: ProgressBarProps) {
       <motion.div
         className="absolute inset-0 bg-aqua-600"
         style={{
-          opacity: useSpring(
-            scrollYProgress,
-            {
-              stiffness: 100,
-              damping: 30,
-            }
-          ),
+          opacity: opacitySpring,
         }}
         initial={{ opacity: 0 }}
         animate={{
