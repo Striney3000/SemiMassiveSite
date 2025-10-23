@@ -1,0 +1,191 @@
+Stage 10 — SEO copy sweep for “Solutions”, smart JSON-LD (CreativeWork → HowTo/TechArticle), and a writing guide
+
+Paste into Replit AI:
+
+Apply an SEO-focused pass across navigation, Solutions pages, and metadata. Add microdata helpers for HowTo and TechArticle, selectable per intervention based on frontmatter. Include a short author guide for writing future solution slices.
+
+1) Copy sweep: homepage & nav
+
+Header nav label remains Solutions (pointing to /interventions).
+
+In app/page.tsx:
+
+Change the section heading from “Selected solutions” → “Problems we solved” (to match the listing).
+
+Tighten hero subtext (≤ 110 chars):
+
+“Co-development in AI, XR, and behaviour-driven systems — targeted interventions inside complex products.”
+
+Ensure featured cards link to /interventions/{slug} and use short 1-liners for result (≤ 80 chars).
+
+2) Solutions listing page (/app/interventions/page.tsx) metadata
+
+generateMetadata():
+
+title: “Solutions — Problems we solved | SemiMassive”
+
+description: “Targeted product interventions in AI, XR, and behaviour systems — problem → intervention → result.”
+
+alternates.canonical: ${SITE}/interventions
+
+Add a short intro paragraph under H1 (≤ 18 words):
+
+“Surgical interventions that change momentum inside complex products and teams.”
+
+3) Update frontmatter to steer schema
+
+In /lib/types.ts, extend the schema to allow choosing a JSON-LD type and the bullets for HowTo steps:
+
+import { z } from 'zod';
+export const CaseStudyFrontmatter = z.object({
+  title: z.string(),
+  slug: z.string(),
+  client: z.string().optional(),
+  year: z.number().int().optional(),
+  role: z.array(z.string()).default([]),
+  summary: z.string(),
+  impact: z.array(z.string()).default([]),
+  pillars: z.array(z.string()).default([]),
+  thumbnail: z.string().optional(),
+  hero: z.string().optional(),
+  readingTime: z.number().int().optional(),
+  featured: z.boolean().default(false),
+  schemaType: z.enum(['Intervention','CaseStudy','HowTo','TechArticle']).default('Intervention'),
+  lastmod: z.string().optional(),
+  // Solutions listing triad:
+  problem: z.string().optional(),
+  intervention: z.string().optional(),
+  result: z.string().optional(),
+  // Optional HowTo steps:
+  howtoSteps: z.array(z.string()).optional(),
+});
+export type CaseStudyMeta = z.infer<typeof CaseStudyFrontmatter>;
+
+
+Edit the two MDX files to keep schemaType: "Intervention" (default). If one reads like a procedure later, we can set schemaType: "HowTo" and include howtoSteps.
+
+4) JSON-LD helpers in lib/seo.ts
+
+Add two new helpers and a selector:
+
+export const howToJsonLd = (p: {
+  name: string; description: string; url: string; image?: string; steps: string[];
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: p.name,
+  description: p.description,
+  image: p.image,
+  step: p.steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.length > 80 ? s.slice(0, 80) + '…' : s,
+    text: s,
+  })),
+  url: p.url,
+});
+
+export const techArticleJsonLd = (p: {
+  name: string; description: string; url: string; dateModified?: string; image?: string;
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: p.name,
+  description: p.description,
+  dateModified: p.dateModified,
+  image: p.image,
+  url: p.url,
+});
+
+// keep existing creativeWorkJsonLd(org/breadcrumbs) and add a router:
+export function interventionJsonLdRouter(p: {
+  schemaType?: 'Intervention'|'CaseStudy'|'HowTo'|'TechArticle';
+  name: string; description: string; url: string; dateModified?: string; image?: string; steps?: string[];
+}) {
+  if (p.schemaType === 'HowTo' && p.steps?.length) {
+    return howToJsonLd({ name: p.name, description: p.description, url: p.url, image: p.image, steps: p.steps });
+  }
+  if (p.schemaType === 'TechArticle') {
+    return techArticleJsonLd({ name: p.name, description: p.description, url: p.url, dateModified: p.dateModified, image: p.image });
+  }
+  // default
+  return creativeWorkJsonLd({ name: p.name, description: p.description, url: p.url, dateModified: p.dateModified, image: p.image });
+}
+
+
+5) Use the router in /app/interventions/[slug]/page.tsx
+
+Where JSON-LD is added, replace the static call with:
+
+import { interventionJsonLdRouter, breadcrumbJsonLd } from '@/lib/seo';
+// ...
+const jsonLd = interventionJsonLdRouter({
+  schemaType: meta.schemaType as any,
+  name: meta.title,
+  description: meta.summary,
+  url: `${BASE_URL}/interventions/${meta.slug}`,
+  dateModified: meta.lastmod,
+  image: meta.hero,
+  steps: meta.howtoSteps,
+});
+
+
+Keep BreadcrumbList as-is.
+
+6) Microcopy & headings (detail pages)
+
+Above-the-fold triad labels: Problem / Intervention / Result (title-case, short).
+
+Ensure the MDX “Snapshot” stays ≤ 4 lines total and bullets are fragments, not sentences.
+
+Convert any passive phrases to active, outcome-first verbs (e.g., “Reduced abandonment by…”).
+
+7) Internal linking for topical authority
+
+At the bottom of each intervention detail page, add a small “See also” block with 2–3 links to other interventions or (future) essays using shared pillars (AI, XR, behavioural systems). Keep it minimal, same page width.
+
+8) Add a writing guide for future “solution slices”
+
+Create /WRITING_GUIDE_SOLUTIONS.md:
+
+# Writing “Solutions” (Intervention slices)
+**Goal:** Prove capability via problem → intervention → result, in < 300 words.
+
+## Frontmatter
+- `title`: Outcome-oriented.  
+- `summary`: 1 sentence; ≤ 155 chars (meta).  
+- `problem`, `intervention`, `result`: 1 line each (card + above-the-fold triad).  
+- `schemaType`: `Intervention` (default). Use `HowTo` when it’s procedural and add `howtoSteps`.
+- `pillars`: 2–4 tags (AI, XR, Behaviour, Onboarding, Retention).
+
+## Body (sections)
+- **Snapshot** — 1 line + 3 bullets (Problem, Constraint, Result).  
+- **Context** — 1–2 lines.  
+- **Constraint → Breakthrough** — bullets; finish with the principle.  
+- **System decision → UX expression** — 2–3 bullets or a diagram.  
+- **Outcome** — 2–3 bullets, quantified when possible.  
+- **Transferable pattern** — 1 paragraph: how this applies to SaaS/mobile/AI tools.  
+- **If extended…** — 1–3 bullets.
+
+## Style rules
+- Active voice. Short lines. No filler.
+- No process theatre (personas, big discovery). Only leverage points.
+- Prefer verbs that signal change: reduce, increase, clarify, defer, stage, pace.
+- Numbers beat adjectives. If NDA: show *delta* not raw numbers.
+
+
+9) Preview/robots safety
+
+Ensure robots.txt still resolves from production domain and that previews are noindex if VERCEL_ENV !== 'production'. If not already present, add a small check in generateMetadata() on pages to set { robots: { index: false } } outside prod.
+
+10) Done criteria
+
+Solutions listing shows “Problems we solved” and concise cards (Problem/Intervention/Result).
+
+Detail pages include JSON-LD chosen via schemaType (Intervention default; HowTo and TechArticle optional).
+
+Canonicals and sitemap reference /interventions/*.
+
+WRITING_GUIDE_SOLUTIONS.md added at repo root.
+
+Lighthouse SEO ≥ 95; HTML validates; no console warnings on SSR.

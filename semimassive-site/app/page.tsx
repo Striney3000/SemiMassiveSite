@@ -35,7 +35,7 @@ export default function Home() {
                 market catches up.
               </h1>
               <p className="text-text-300 text-xl md:text-2xl max-w-3xl">
-                Co-development in AI, XR, and behaviour-driven systems.
+                Co-development in AI, XR, and behaviour-driven systems — targeted interventions inside complex products.
               </p>
             </div>
 

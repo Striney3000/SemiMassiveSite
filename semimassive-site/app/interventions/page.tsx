@@ -9,16 +9,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const url = new URL('/interventions', base).toString();
 
   return {
-    title: 'Solutions',
+    title: 'Solutions — Problems we solved',
     description:
-      'SemiMassive solutions: targeted product interventions in AI, XR, and behaviour systems.',
+      'Targeted product interventions in AI, XR, and behaviour systems — problem → intervention → result.',
     alternates: { canonical: url },
     robots: getRobotsForEnvironment(),
     openGraph: {
       url,
-      title: 'Solutions | SemiMassive',
+      title: 'Solutions — Problems we solved | SemiMassive',
       description:
-        'SemiMassive solutions: targeted product interventions in AI, XR, and behaviour systems.',
+        'Targeted product interventions in AI, XR, and behaviour systems — problem → intervention → result.',
     },
     twitter: { card: 'summary_large_image' },
   };

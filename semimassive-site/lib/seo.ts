@@ -49,3 +49,78 @@ export const creativeWorkJsonLd = (p: {
   dateModified: p.dateModified,
   author: p.authorName ? { '@type': 'Person', name: p.authorName } : undefined,
 });
+
+export const howToJsonLd = (p: {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  steps: string[];
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: p.name,
+  description: p.description,
+  image: p.image,
+  step: p.steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.length > 80 ? s.slice(0, 80) + '…' : s,
+    text: s,
+  })),
+  url: p.url,
+});
+
+export const techArticleJsonLd = (p: {
+  name: string;
+  description: string;
+  url: string;
+  dateModified?: string;
+  image?: string;
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: p.name,
+  description: p.description,
+  dateModified: p.dateModified,
+  image: p.image,
+  url: p.url,
+});
+
+export function interventionJsonLdRouter(p: {
+  schemaType?: 'Intervention' | 'CaseStudy' | 'HowTo' | 'TechArticle';
+  name: string;
+  description: string;
+  url: string;
+  dateModified?: string;
+  image?: string;
+  steps?: string[];
+  authorName?: string;
+}) {
+  if (p.schemaType === 'HowTo' && p.steps?.length) {
+    return howToJsonLd({
+      name: p.name,
+      description: p.description,
+      url: p.url,
+      image: p.image,
+      steps: p.steps,
+    });
+  }
+  if (p.schemaType === 'TechArticle') {
+    return techArticleJsonLd({
+      name: p.name,
+      description: p.description,
+      url: p.url,
+      dateModified: p.dateModified,
+      image: p.image,
+    });
+  }
+  return creativeWorkJsonLd({
+    name: p.name,
+    description: p.description,
+    url: p.url,
+    dateModified: p.dateModified,
+    image: p.image,
+    authorName: p.authorName,
+  });
+}

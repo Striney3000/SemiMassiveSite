@@ -13,11 +13,12 @@ export const CaseStudyFrontmatter = z.object({
   hero: z.string().optional(),
   readingTime: z.number().int().optional(),
   featured: z.boolean().default(false),
-  schemaType: z.enum(['Intervention', 'CaseStudy']).default('Intervention'),
+  schemaType: z.enum(['Intervention', 'CaseStudy', 'HowTo', 'TechArticle']).default('Intervention'),
   lastmod: z.string().optional(),
   problem: z.string().optional(),
   intervention: z.string().optional(),
   result: z.string().optional(),
+  howtoSteps: z.array(z.string()).optional(),
 });
 
 export type CaseStudyMeta = z.infer<typeof CaseStudyFrontmatter>;
