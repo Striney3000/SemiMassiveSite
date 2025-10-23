@@ -18,6 +18,10 @@
   --aqua-600: #2ab89d;
   --aqua-700: #1a9d84;
 
+  /* Accent decoration colors with opacity */
+  --aqua-decoration-subtle: rgba(93, 217, 193, 0.3);
+  --aqua-decoration-hover: rgba(63, 207, 180, 0.5);
+
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-quick: 140ms;
@@ -105,11 +109,13 @@
   /* Link and button states with tiered aqua accent */
   a {
     @apply text-aqua-400 transition-colors duration-soft ease-out-smooth;
-    @apply underline decoration-aqua-400/30;
+    @apply underline;
+    text-decoration-color: var(--aqua-decoration-subtle);
   }
 
   a:hover {
-    @apply text-aqua-500 decoration-aqua-500/50;
+    @apply text-aqua-500;
+    text-decoration-color: var(--aqua-decoration-hover);
   }
 
   a:active {
@@ -159,10 +165,15 @@
     @apply bg-aqua-400 text-base-950;
     @apply font-heading font-semibold text-lg;
     @apply transition-all duration-soft ease-out-smooth;
-    @apply hover:bg-aqua-500 hover:shadow-lg hover:shadow-aqua-500/20;
+    @apply hover:bg-aqua-500 hover:shadow-lg;
     @apply active:bg-aqua-600 active:scale-[0.98];
     @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700;
     min-height: 56px;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 10px 15px -3px rgba(63, 207, 180, 0.2),
+      0 4px 6px -4px rgba(63, 207, 180, 0.2);
   }
 
   /* Proof chips */

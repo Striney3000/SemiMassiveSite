@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     'Co-development in AI, XR, and behaviour-driven systems. We ship the next generation of product experiences before the market catches up.',
 };
 
+const currentYear = 2025;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,7 +68,7 @@ export default function RootLayout({
           <footer className="w-full py-12 px-6 md:px-12 border-t border-base-800">
             <div className="max-w-7xl mx-auto">
               <p className="text-text-300 text-base">
-                © {new Date().getFullYear()} Semimassive. All rights reserved.
+                © {currentYear} Semimassive. All rights reserved.
               </p>
             </div>
           </footer>
