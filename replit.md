@@ -45,8 +45,8 @@ Preferred communication style: Simple, everyday language.
 
 **Page Architecture**: Individual route modules in `/app` directory
 - Home page: Hero section with value proposition, CTA, and social proof chips
-- Work/Services/About: Placeholder pages for future content expansion
-- **Future consideration**: MDX integration planned (evidenced by prose.css styles)
+- Work: Dynamic case study listing and individual pages powered by MDX
+- Services/About: Placeholder pages for future content expansion
 
 ### Styling Architecture
 
@@ -69,6 +69,39 @@ Preferred communication style: Simple, everyday language.
 - `strict: true` enforces null checks, strict function types, and other safety features
 - Path aliases configured (`@/*`) for cleaner imports
 - Next.js plugin enabled for enhanced TypeScript support
+
+### Content Management System (Added Oct 23, 2025)
+
+**MDX-Based Case Studies**: File-based content system for work portfolio
+- **Implementation**: MDX files in `/content/work/` with Zod-validated frontmatter
+- **Rationale**: Provides type-safe, git-versioned content that designers/engineers can edit directly
+- **Features**: 
+  - Frontmatter validation with Zod schema (title, client, year, role, impact, pillars, etc.)
+  - Custom components (Section, Prose, Metric, Figure, Snapshot, CTA) available in MDX
+  - Automatic static generation of all case study pages
+  - SEO metadata and JSON-LD structured data per case study
+- **Content Flow**: 
+  1. Create `.mdx` file in `/content/work/`
+  2. Add validated frontmatter (title, summary, impact metrics, etc.)
+  3. Write content using Markdown + custom React components
+  4. Automatically appears on `/work` listing and generates `/work/[slug]` route
+
+**Content Components** (located in `/components/`):
+- `Section`: Responsive container with configurable spacing and bleed options
+- `Prose`: Typography wrapper for readable long-form content
+- `Metric`: Impact metric display (value + label) for case study headers
+- `Figure`: Image/video component with optional captions
+- `Snapshot`: Three-column Problem/Constraint/Result layout
+- `CTA`: Primary/secondary call-to-action buttons with link functionality
+
+**Content Utilities** (located in `/lib/`):
+- `mdx.ts`: getAllWork() and getWorkBySlug() for content loading, compileMdx() for rendering
+- `types.ts`: Zod schema for frontmatter validation
+- `images.ts`: Image dimension and aspect ratio helpers
+
+**Current Case Studies**:
+- XDefiant — Onboarding uplift at scale (Ubisoft, 2024) - Featured
+- Atlas Obscura VR — Completion through curiosity (Atlas Obscura / Meta, 2018)
 
 ### SEO Infrastructure (Added Oct 23, 2025)
 
@@ -126,6 +159,14 @@ Preferred communication style: Simple, everyday language.
 ### Core Framework
 - **next** (v15.0.0): React framework for production
 - **react** (v18.3.0) / **react-dom** (v18.3.0): UI library
+
+### Content & MDX
+- **next-mdx-remote**: RSC-compatible MDX compiler for case studies
+- **gray-matter**: Frontmatter parsing from MDX files
+- **remark-gfm**: GitHub Flavored Markdown support
+- **rehype-slug**: Automatic heading IDs for anchor links
+- **rehype-autolink-headings**: Linkable headings
+- **rehype-pretty-code**: Code syntax highlighting
 
 ### Styling
 - **tailwindcss** (v3.4.14): Utility-first CSS framework
