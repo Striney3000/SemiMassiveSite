@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const inter = Inter({
@@ -17,9 +18,26 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Semimassive - Next Generation Product Experiences',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  ),
+  title: {
+    template: '%s | SemiMassive',
+    default: 'SemiMassive — Future Product Co-Dev',
+  },
   description:
-    'Co-development in AI, XR, and behaviour-driven systems. We ship the next generation of product experiences before the market catches up.',
+    'We ship the next generation of product experiences before the market catches up.',
+  openGraph: {
+    type: 'website',
+    siteName: 'SemiMassive',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 const currentYear = 2025;
@@ -29,6 +47,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <body>
@@ -44,17 +65,26 @@ export default function RootLayout({
                 </div>
                 <ul className="flex gap-6 md:gap-8">
                   <li>
-                    <a href="/work" className="no-underline text-text-300 hover:text-text-100">
+                    <a
+                      href="/work"
+                      className="no-underline text-text-300 hover:text-text-100"
+                    >
                       Work
                     </a>
                   </li>
                   <li>
-                    <a href="/services" className="no-underline text-text-300 hover:text-text-100">
+                    <a
+                      href="/services"
+                      className="no-underline text-text-300 hover:text-text-100"
+                    >
                       Services
                     </a>
                   </li>
                   <li>
-                    <a href="/about" className="no-underline text-text-300 hover:text-text-100">
+                    <a
+                      href="/about"
+                      className="no-underline text-text-300 hover:text-text-100"
+                    >
                       About
                     </a>
                   </li>
@@ -73,6 +103,15 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+
+        {/* Plausible Analytics - only in production when domain is set */}
+        {isProd && plausibleDomain && (
+          <Script
+            defer
+            data-domain={plausibleDomain}
+            src="https://plausible.io/js/script.js"
+          />
+        )}
       </body>
     </html>
   );

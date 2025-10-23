@@ -1,3 +1,24 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const url = new URL('/about', base).toString();
+
+  return {
+    title: 'About',
+    description:
+      'Learn more about SemiMassive, our team, and our approach to co-developing the next generation of product experiences.',
+    alternates: { canonical: url },
+    openGraph: {
+      url,
+      title: 'About | SemiMassive',
+      description:
+        'Learn more about SemiMassive, our team, and our approach to co-developing the next generation of product experiences.',
+    },
+    twitter: { card: 'summary_large_image' },
+  };
+}
+
 export default function AboutPage() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center px-6 md:px-12">

@@ -1,3 +1,24 @@
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const url = new URL('/services', base).toString();
+
+  return {
+    title: 'Services',
+    description:
+      'Discover how SemiMassive can help accelerate your product vision with co-development in AI, XR, and behaviour-driven systems.',
+    alternates: { canonical: url },
+    openGraph: {
+      url,
+      title: 'Services | SemiMassive',
+      description:
+        'Discover how SemiMassive can help accelerate your product vision with co-development in AI, XR, and behaviour-driven systems.',
+    },
+    twitter: { card: 'summary_large_image' },
+  };
+}
+
 export default function ServicesPage() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center px-6 md:px-12">
