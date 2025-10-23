@@ -22,7 +22,7 @@ function derivePIRFromMeta(work: CaseStudyMeta): { problem: string; intervention
 
 export function WorkCard({ work, index }: WorkCardProps) {
   const handleClick = () => {
-    track('Work Opened', { slug: work.slug, card_position: index + 1 });
+    track('Solution Opened', { slug: work.slug, card_position: index + 1 });
   };
 
   const pir = derivePIRFromMeta(work);
