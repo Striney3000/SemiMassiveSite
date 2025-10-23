@@ -1,0 +1,228 @@
+Stage 3 — MDX content + routes (/work, /work/[slug]) with Zod validation
+
+Paste into Replit AI:
+
+Add an MDX-based content system for case studies:
+
+1) Install deps
+
+gray-matter, remark-gfm, remark-slug, rehype-autolink-headings, rehype-pretty-code
+
+2) Folders & files
+Create:
+
+/content/work/                # MDX files live here
+  xdefiant-onboarding.mdx
+  atlas-obscura-vr.mdx
+/lib/
+  mdx.ts                      # loader + Zod frontmatter schema
+  types.ts                    # shared types
+  images.ts                   # next/image helpers (sizes, aspect)
+/components/
+  Section.tsx
+  Prose.tsx
+  Metric.tsx
+  Figure.tsx
+  Snapshot.tsx
+  CTA.tsx
+/styles/prose.css             # MDX typography overrides
+/public/work/xdefiant/        # placeholder media
+/public/work/atlas/           # placeholder media
+
+
+3) Frontmatter schema (Zod)
+
+In /lib/types.ts:
+
+import { z } from 'zod';
+export const CaseStudyFrontmatter = z.object({
+  title: z.string(),
+  slug: z.string(),
+  client: z.string().optional(),
+  year: z.number().int().optional(),
+  role: z.array(z.string()).default([]),
+  summary: z.string(),
+  impact: z.array(z.string()).default([]),
+  pillars: z.array(z.string()).default([]),
+  thumbnail: z.string().optional(),
+  hero: z.string().optional(),
+  readingTime: z.number().int().optional(),
+  featured: z.boolean().default(false),
+  schemaType: z.literal('CaseStudy').default('CaseStudy'),
+  lastmod: z.string().optional(),
+});
+export type CaseStudyMeta = z.infer<typeof CaseStudyFrontmatter>;
+
+
+4) MDX loader utils
+
+In /lib/mdx.ts implement:
+
+getAllWork() → returns CaseStudyMeta[] sorted by year desc, featured first
+
+getWorkBySlug(slug: string) → returns { meta: CaseStudyMeta, content: string }
+
+Use fs/promises to read /content/work/*.mdx, gray-matter to split frontmatter + body, validate with Zod, and throw if invalid.
+
+Export an async compileMdx(content: string) that uses next-mdx-remote/rsc or mdx-bundler-style compilation via remark/rehype (pick the cleanest for App Router; RSC-friendly). Enable remark-gfm, remark-slug, rehype-autolink-headings, rehype-pretty-code.
+
+5) Components
+
+Section.tsx: wrapper with props { as?, className?, bleed? } and responsive vertical rhythm.
+
+Prose.tsx: applies /styles/prose.css with large readable defaults; ensure links/features inherit our accent states.
+
+Metric.tsx: props { value: string; label: string; footnote?: string }.
+
+Figure.tsx: props { src: string; alt: string; caption?: string; width?: number; height?: number; priority?: boolean } and an optional <video> path.
+
+Snapshot.tsx: renders “Problem / Constraint / Result” bullet trio when passed a children block or an object prop { problem, constraint, result }.
+
+CTA.tsx: primary & secondary button variants using the tiered aqua states and accessible focus rings.
+
+6) Routes
+
+/app/work/page.tsx:
+
+Fetch getAllWork(), render large cards with title, 1-line summary, pillars chips, and a big tap target linking to /work/[slug].
+
+Add generateMetadata() with canonical to /work.
+
+/app/work/[slug]/page.tsx:
+
+Use getWorkBySlug(params.slug) and compile the MDX body.
+
+Above-the-fold “Snapshot” section: render title, summary, and a Metric row from impact.
+
+Prose-wrapped MDX body follows. Support the section headers we’ll use: “Snapshot”, “Context”, “Constraint → Breakthrough”, “System decision → UX expression”, “Outcome”, “Transferable pattern”, “If extended…”.
+
+Add generateStaticParams using all slugs.
+
+generateMetadata() builds canonical and OG tags using frontmatter; include JSON-LD (CreativeWork + BreadcrumbList) with url = ${SITE}/work/${slug}.
+
+7) Example MDX content
+
+Create /content/work/xdefiant-onboarding.mdx with this frontmatter:
+
+---
+title: "XDefiant — Onboarding uplift at scale"
+slug: "xdefiant-onboarding"
+client: "Ubisoft"
+year: 2024
+role: ["Lead UX/UI", "Systems"]
+summary: "Shipped onboarding and feedback systems that lifted early session time 20%+ for a 12M+ player launch."
+impact:
+  - "12M+ players launch window"
+  - "20%+ uplift in onboarding session duration"
+  - "Team scaled 2 → 9; throughput +30%"
+pillars: ["Onboarding", "Behavioural systems", "Live service"]
+thumbnail: "/work/xdefiant/cover.jpg"
+hero: "/work/xdefiant/hero.jpg"
+readingTime: 4
+featured: true
+schemaType: "CaseStudy"
+lastmod: "2025-10-23"
+---
+
+
+Body:
+
+## Snapshot
+Onboarded millions fast by clarifying goals, pacing challenge, and tightening feedback loops.
+- Problem: early-session drop due to cognitive overload.
+- Constraint: live-service launch, distributed teams, evolving content.
+- Result: 20%+ uplift in onboarding session duration and cleaner first-hour funnels.
+
+## Context
+AAA live-service FPS with rapid content cadence and high first-hour abandonment risk.
+
+## Constraint → Breakthrough
+- Many first-time players misread ability and mode affordances.
+- Telemetry showed hesitations at choice points and tutorial fatigue.
+- Breakthrough: reduce branching early, front-load clarity, back-load mastery.
+
+## System decision → UX expression
+- "One path to first fun": collapse choices, stage unlocks, raise feedback salience.
+- HUD and ability cues shifted to consistent, peripheral channels.
+- Tutorial → guided scenario with immediate competence moments.
+
+## Outcome
+- 12M+ players at launch consumed onboarding with lower friction.
+- 20%+ uplift in onboarding session duration.
+- Team scaled 2 → 9, throughput +30% after Figma process changes.
+
+## Transferable pattern
+For SaaS/mobile: limit early choice to one recommended path, ship "first win" in ≤3 steps, make system feedback peripheral and consistent, defer configuration.
+
+## If extended…
+Progressive mastery track, adaptive hints from live telemetry, "returning user nudge" variants.
+
+
+Create /content/work/atlas-obscura-vr.mdx with this frontmatter:
+
+---
+title: "Atlas Obscura VR — Completion through curiosity"
+slug: "atlas-obscura-vr"
+client: "Atlas Obscura / Meta"
+year: 2018
+role: ["Experience Design Lead"]
+summary: "Turned long-form exploration into a complete, gamified journey most users actually finish."
+impact:
+  - "80% completion of a 45-minute experience"
+  - "Reduced disorientation via diegetic wayfinding"
+pillars: ["Spatial UX", "Narrative systems", "Comfort"]
+thumbnail: "/work/atlas/cover.jpg"
+hero: "/work/atlas/hero.jpg"
+readingTime: 4
+featured: false
+schemaType: "CaseStudy"
+lastmod: "2025-10-23"
+---
+
+
+Body:
+
+## Snapshot
+Turned long-form exploration into a complete, gamified journey most users actually finish.
+- Problem: 45-minute interactive doc risks mid-way fatigue.
+- Constraint: spatial UX, photogrammetry + 360° video, comfort limits.
+- Result: 80% completion with clear diegetic guidance and choice pacing.
+
+## Context
+Branching, location-based VR narrative funded by Meta; heavy constraints on motion and comfort.
+
+## Constraint → Breakthrough
+- Cognitive load spikes at branch points and transitions.
+- Breakthrough: use diegetic wayfinding + subtle progression cues to keep momentum without UI overlays.
+
+## System decision → UX expression
+- Spatial markers integrated into scene composition and audio.
+- Choice presented as "curiosity pulls," not menus.
+- Micro-goals every 90–120 seconds for progress salience.
+
+## Outcome
+- 80% of users reached full completion of a 45-minute experience.
+- Clearer scene-to-scene continuity, reduced disorientation.
+
+## Transferable pattern
+For content and edtech: make progress visible in-line with the medium, present choices as narrative affordances, not settings. Reward curiosity with immediate payoff.
+
+## If extended…
+Dynamic route hints from gaze/time signals, lightweight collectibles that reinforce memory.
+
+
+8) Styles
+
+In /styles/prose.css, set large reading sizes, heading margins, link underline decoration, and ensure high contrast on the warm dark base. Respect our accent tiering on :hover, :active, :focus-visible.
+
+9) Done criteria
+
+/work lists both case studies with large tap targets.
+
+/work/xdefiant-onboarding and /work/atlas-obscura-vr render MDX with our components and section headings.
+
+Frontmatter is validated; invalid content throws a readable error.
+
+View source shows proper canonical on these routes.
+
+Show the updated tree and key snippets to confirm.
