@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllWork, getWorkBySlug, compileMdx } from '@/lib/mdx';
-import { creativeWorkJsonLd, breadcrumbJsonLd } from '@/lib/seo';
+import { interventionJsonLdRouter, breadcrumbJsonLd } from '@/lib/seo';
 import { getRobotsForEnvironment } from '@/lib/metadata';
 import { Prose } from '@/components/Prose';
 import { Section } from '@/components/Section';
@@ -12,6 +12,7 @@ import { CTA } from '@/components/CTA';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { CaseStudyPageWrapper } from '@/components/CaseStudyPageWrapper';
+import { SeeAlso } from '@/components/SeeAlso';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -91,12 +92,14 @@ export default async function InterventionDetailPage({ params }: PageProps) {
   const url = `${base}/interventions/${slug}`;
 
   const jsonLd = {
-    creativeWork: creativeWorkJsonLd({
+    intervention: interventionJsonLdRouter({
+      schemaType: meta.schemaType,
       name: meta.title,
       description: meta.summary,
       url,
       dateModified: meta.lastmod,
       image: meta.hero,
+      steps: meta.howtoSteps,
       authorName: 'SemiMassive',
     }),
     breadcrumb: breadcrumbJsonLd([
@@ -110,6 +113,22 @@ export default async function InterventionDetailPage({ params }: PageProps) {
 
   const hasPIR = meta.problem || meta.intervention || meta.result;
 
+  const allWork = await getAllWork();
+  const relatedSolutions = allWork
+    .filter((item) => item.slug !== slug)
+    .filter((item) => {
+      const sharedPillars = item.pillars.filter((pillar) =>
+        meta.pillars.includes(pillar)
+      );
+      return sharedPillars.length > 0;
+    })
+    .slice(0, 3)
+    .map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      pillars: item.pillars,
+    }));
+
   return (
     <CaseStudyPageWrapper slug={slug}>
       <div className="w-full min-h-screen">
@@ -117,7 +136,7 @@ export default async function InterventionDetailPage({ params }: PageProps) {
         
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.creativeWork) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.intervention) }}
         />
         <script
           type="application/ld+json"
@@ -203,6 +222,8 @@ export default async function InterventionDetailPage({ params }: PageProps) {
           </header>
 
           <div className="mt-12">{mdxContent as React.ReactNode}</div>
+
+          <SeeAlso related={relatedSolutions} />
         </Section>
       </div>
     </CaseStudyPageWrapper>
