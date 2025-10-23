@@ -48,6 +48,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <body>
@@ -102,16 +105,13 @@ export default function RootLayout({
           </footer>
         </div>
 
-        {/* Plausible Analytics - commented out, uncomment when ready for production
-            Set NEXT_PUBLIC_PLAUSIBLE_DOMAIN in .env.local or .env.production */}
-        {/*
-        <Script
-          defer
-          data-domain="semimassive.com"
-          src="https://plausible.io/js/script.js"
-          strategy="afterInteractive"
-        />
-        */}
+        {isProd && plausibleDomain ? (
+          <script
+            defer
+            data-domain={plausibleDomain}
+            src="https://plausible.io/js/script.js"
+          />
+        ) : null}
       </body>
     </html>
   );
