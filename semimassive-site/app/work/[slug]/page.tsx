@@ -5,6 +5,9 @@ import { creativeWorkJsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { Prose } from '@/components/Prose';
 import { Section } from '@/components/Section';
 import { Metric } from '@/components/Metric';
+import { Figure } from '@/components/Figure';
+import { Snapshot } from '@/components/Snapshot';
+import { CTA } from '@/components/CTA';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -61,7 +64,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
   }
 
   const { meta, content } = work;
-  const mdxContent = await compileMdx(content);
+  
+  const components = {
+    Section,
+    Prose,
+    Metric,
+    Figure,
+    Snapshot,
+    CTA,
+  };
+  
+  const mdxContent = await compileMdx(content, components);
 
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const url = `${base}/work/${slug}`;
