@@ -15,6 +15,15 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Detail pages include compact PIR row above metrics
 - All internal links, breadcrumbs, and metadata updated to use `/interventions`
 
+**SEO & Content Quality Enhancement** (Stage 10):
+- Enhanced metadata across all Solutions pages with problem → intervention → result messaging
+- Implemented smart JSON-LD routing: supports CreativeWork (default), HowTo, and TechArticle schema types
+- Schema selection via frontmatter `schemaType` field with optional `howtoSteps` for procedural content
+- Added internal linking via "See Also" component (filters by shared pillars)
+- Created `WRITING_GUIDE_SOLUTIONS.md` for content authoring standards
+- Preview environment noindex protection via `getRobotsForEnvironment()`
+- Homepage hero copy tightened to 104 characters with targeted interventions message
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
