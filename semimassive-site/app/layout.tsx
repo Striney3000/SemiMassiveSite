@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Script from 'next/script';
+import { PageTransition } from '@/components/PageTransition';
 import './globals.css';
 
 const inter = Inter({
@@ -90,7 +91,7 @@ export default function RootLayout({
             </nav>
           </header>
           <main id="main-content" className="flex-1">
-            {children}
+            <PageTransition>{children}</PageTransition>
           </main>
           <footer className="w-full py-12 px-6 md:px-12 border-t border-base-800">
             <div className="max-w-7xl mx-auto">

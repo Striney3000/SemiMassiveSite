@@ -1,0 +1,105 @@
+Stage 4 — Purposeful motion, tiered states, progress bar, OG image route
+
+Paste into Replit AI:
+
+Implement small, purposeful motion and interaction polish that respects our minimalism and accessibility:
+
+1) Install Framer Motion (if not already)
+
+Add framer-motion.
+
+2) Global motion helpers
+
+Create /components/motion/atoms.ts exporting:
+
+fadeIn and riseIn variants: { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0, transition: { duration: 0.26, ease: 'easeOut' } } } and a simple { opacity: 0 → 1 } version.
+
+A ReducedMotionGate component that reads prefers-reduced-motion (via useReducedMotion) and disables animation props when true.
+
+3) Route transition shell
+
+In app/layout.tsx, wrap <main> contents with a small Motion wrapper:
+
+On route change, use a minimal opacity transition (no big page wipes).
+
+Make sure that when prefers-reduced-motion is enabled, transitions are disabled.
+
+4) Section reveal
+
+Update Section so first render uses riseIn on its children when they first enter the viewport (IntersectionObserver or Framer’s whileInView).
+
+Ensure reveal happens once per section; avoid scroll-jank.
+
+5) Tiered accent interaction states
+
+In Tailwind/theme, ensure we have classes for:
+
+Hover → aqua-500
+
+Active/pressed → aqua-600
+
+Focus-visible ring → aqua-700 with outline-offset
+
+Update CTA and anchor default styles:
+
+Links show a subtle underline; hover transitions underline + color to aqua-500; active to aqua-600; focus-visible ring aqua-700.
+
+Buttons get a very light “micro-pulse” (scale 0.98 → 1) only on focus-visible and only if not reduced motion.
+
+6) Slim scroll progress indicator (long pages only)
+
+Create /components/ProgressBar.tsx:
+
+Fixed 2–3px bar at top; width driven by scroll progress.
+
+Hidden unless the page has enough content (opt-in prop in page components).
+
+Use aqua-500 base, aqua-600 when >75%.
+
+Add to case study pages (/work/[slug]) below the header; hide on short pages.
+
+7) OG Image route
+
+Create /app/api/og/route.tsx using @vercel/og:
+
+Render a clean card: dark canvas, title (large), client/year (small), and a thin aqua rule.
+
+Accept title, subtitle (summary), and optional image query params.
+
+Export runtime = 'edge'.
+
+Integrate with case study metadata:
+
+In /app/work/[slug]/page.tsx generateMetadata(), set openGraph.images to \${BASE_URL}/api/og?title=${encodeURIComponent(meta.title)}&subtitle=${encodeURIComponent(meta.summary)}`` (escape properly).
+
+8) Skip link + focus order polish
+
+Ensure a visible skip link jumps to #content.
+
+Confirm header → main → footer tab order is logical; menus and buttons have visible focus rings.
+
+9) Verify reduced motion
+
+Respect prefers-reduced-motion everywhere:
+
+Route transitions disabled
+
+Section reveals disabled
+
+Button micro-pulse disabled
+
+10) Done criteria
+
+Page loads with no console errors.
+
+Sections gently reveal as you scroll; reduced motion disables them.
+
+Links/buttons show tiered aqua states (hover/active/focus).
+
+Case study pages show a slim scroll progress bar only when content is long.
+
+Visiting /api/og?title=SemiMassive&subtitle=Future%20Product%20Co-Dev returns a proper OG image.
+
+Lighthouse Accessibility ≥ 95, Best Practices ≥ 95 (rough pass is fine).
+
+Show me the updated files and key snippets (ProgressBar, motion atom variants, OG route) when finished.

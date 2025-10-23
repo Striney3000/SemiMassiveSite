@@ -176,6 +176,26 @@
       0 4px 6px -4px rgba(63, 207, 180, 0.2);
   }
 
+  /* Micro-pulse on focus (respects reduced motion) */
+  @media (prefers-reduced-motion: no-preference) {
+    button:focus-visible,
+    .btn-primary:focus-visible {
+      animation: micro-pulse 0.26s ease-out;
+    }
+  }
+
+  @keyframes micro-pulse {
+    0% {
+      transform: scale(0.98);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   /* Proof chips */
   .proof-chip {
     @apply inline-flex items-center justify-center;

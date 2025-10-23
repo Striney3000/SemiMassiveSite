@@ -8,6 +8,7 @@ import { Metric } from '@/components/Metric';
 import { Figure } from '@/components/Figure';
 import { Snapshot } from '@/components/Snapshot';
 import { CTA } from '@/components/CTA';
+import { ProgressBar } from '@/components/ProgressBar';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -33,6 +34,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const url = new URL(`/work/${slug}`, base).toString();
 
+  const ogImageUrl = new URL('/api/og', base);
+  ogImageUrl.searchParams.set('title', work.meta.title);
+  ogImageUrl.searchParams.set('subtitle', work.meta.summary);
+  if (work.meta.client) ogImageUrl.searchParams.set('client', work.meta.client);
+  if (work.meta.year) ogImageUrl.searchParams.set('year', work.meta.year.toString());
+
   return {
     title: work.meta.title,
     description: work.meta.summary,
@@ -42,15 +49,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: work.meta.title,
       description: work.meta.summary,
       type: 'article',
-      images: work.meta.hero
-        ? [{ url: work.meta.hero, width: 1920, height: 1080 }]
-        : [],
+      images: [{ url: ogImageUrl.toString(), width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
       title: work.meta.title,
       description: work.meta.summary,
-      images: work.meta.hero ? [work.meta.hero] : [],
+      images: [ogImageUrl.toString()],
     },
   };
 }
@@ -95,8 +100,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
     ]),
   };
 
+  const hasLongContent = content.length > 2000;
+
   return (
     <div className="w-full min-h-screen">
+      <ProgressBar show={hasLongContent} />
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.creativeWork) }}
@@ -106,7 +115,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd.breadcrumb) }}
       />
 
-      <Section className="max-w-5xl mx-auto">
+      <Section className="max-w-5xl mx-auto" animate={false}>
         <header className="space-y-6 mb-12">
           <div className="space-y-2">
             {meta.client && meta.year && (
