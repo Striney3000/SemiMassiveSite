@@ -33,8 +33,9 @@ Preferred communication style: Simple, everyday language.
 
 **Design System**:
 - Color palette: Warm dark neutrals (base-950/900/800) with aqua electric accents (400-700 range)
-- Motion system: Three-tier timing (quick/soft/slow) with custom easing function
-- Component patterns: Button primary styles, proof chips, prose styles for future MDX content
+- Motion system: Three-tier timing (quick/soft/slow) with custom easing function, framer-motion for viewport reveals and route transitions
+- Tiered interaction states: aqua-400 (default) → aqua-500 (hover) → aqua-600 (active) → aqua-700 (focus) with micro-pulse animation on hover
+- Component patterns: Button primary styles, proof chips, prose styles for MDX content
 
 ### Component Structure
 
@@ -87,12 +88,14 @@ Preferred communication style: Simple, everyday language.
   4. Automatically appears on `/work` listing and generates `/work/[slug]` route
 
 **Content Components** (located in `/components/`):
-- `Section`: Responsive container with configurable spacing and bleed options
+- `Section`: Responsive container with viewport reveal animations (respects reduced motion), semantic HTML preservation, configurable spacing and bleed options
 - `Prose`: Typography wrapper for readable long-form content
 - `Metric`: Impact metric display (value + label) for case study headers
 - `Figure`: Image/video component with optional captions
 - `Snapshot`: Three-column Problem/Constraint/Result layout
 - `CTA`: Primary/secondary call-to-action buttons with link functionality
+- `ProgressBar`: Scroll progress indicator for long-form content (appears on case study pages)
+- `PageTransition`: Route transition wrapper with fade animations (respects reduced motion)
 
 **Content Utilities** (located in `/lib/`):
 - `mdx.ts`: getAllWork() and getWorkBySlug() for content loading, compileMdx() for rendering
@@ -103,7 +106,29 @@ Preferred communication style: Simple, everyday language.
 - XDefiant — Onboarding uplift at scale (Ubisoft, 2024) - Featured
 - Atlas Obscura VR — Completion through curiosity (Atlas Obscura / Meta, 2018)
 
+### Motion System (Added Oct 23, 2025)
+
+**Framer Motion Integration**: Purposeful, accessibility-first animations
+- **Implementation**: Client-side animations with reduced-motion detection defaulting to motion-disabled
+- **Rationale**: Enhances user experience while respecting accessibility preferences (prefers-reduced-motion)
+- **Features**:
+  - Viewport reveal animations (fade + rise) on Section components with `once: true` and `-100px` margin
+  - Route transitions with fade effects via PageTransition wrapper
+  - Reading progress bar on case study pages (spring-based, respects reduced motion)
+  - Semantic HTML preservation: motion.section, motion.article, motion.aside maintain proper HTML structure
+- **Accessibility**: useReducedMotion() hook initializes to `true` (safe default), only enables motion after client-side matchMedia check confirms user preference
+
+**Motion Utilities** (located in `/components/motion/`):
+- `atoms.ts`: fadeIn and riseIn animation variants for consistent motion language
+- `ReducedMotionGate.tsx`: Accessibility-first hook and component for conditional animation rendering
+
 ### SEO Infrastructure (Added Oct 23, 2025)
+
+**Dynamic OG Image Generation**: @vercel/og API route
+- **Implementation**: `/app/api/og/route.tsx` generates social media cards on-the-fly with ImageResponse
+- **Parameters**: title, subtitle, client, year (all optional, fallback to "Semimassive")
+- **Integration**: Case study pages automatically generate OG images via metadata.openGraph.images
+- **Rationale**: Improves social sharing appearance without manual image creation or storage
 
 **Automated Sitemap Generation**: next-sitemap
 - **Implementation**: Automatically generates sitemap.xml and robots.txt on every build
@@ -111,7 +136,7 @@ Preferred communication style: Simple, everyday language.
 - **Rationale**: Essential for search engine discovery and crawling efficiency
 
 **Metadata System**: generateMetadata on all pages
-- **Implementation**: Each page has canonical URLs, OpenGraph tags, and Twitter card metadata
+- **Implementation**: Each page has canonical URLs, OpenGraph tags, Twitter card metadata, and dynamic OG images
 - **Rationale**: Improves social sharing and search engine understanding
 
 **Security Headers**: Configured in next.config.ts
@@ -167,6 +192,10 @@ Preferred communication style: Simple, everyday language.
 - **rehype-slug**: Automatic heading IDs for anchor links
 - **rehype-autolink-headings**: Linkable headings
 - **rehype-pretty-code**: Code syntax highlighting
+
+### Motion & Animation
+- **framer-motion** (v11.15.0): Declarative animations with accessibility support
+- **@vercel/og** (v0.6.14): Dynamic Open Graph image generation
 
 ### Styling
 - **tailwindcss** (v3.4.14): Utility-first CSS framework
