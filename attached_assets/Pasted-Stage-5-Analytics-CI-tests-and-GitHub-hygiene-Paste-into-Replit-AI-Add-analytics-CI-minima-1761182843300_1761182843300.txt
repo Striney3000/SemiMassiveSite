@@ -1,0 +1,164 @@
+Stage 5 — Analytics, CI, tests, and GitHub hygiene
+
+Paste into Replit AI:
+
+Add analytics, CI, minimal tests, and GitHub housekeeping for semimassive-site.
+
+1) Plausible analytics (conditional)
+
+In app/layout.tsx, render Plausible only in production and only when NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set:
+
+const isProd = process.env.NODE_ENV === 'production';
+const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+{/* …inside <body> near the top or end */}
+{isProd && plausibleDomain ? (
+  <script
+    defer
+    data-domain={plausibleDomain}
+    src="https://plausible.io/js/script.js"
+  />
+) : null}
+
+
+Later we’ll add custom events (CTA clicks, scroll depth) — not needed now.
+
+2) .gitignore and env hygiene
+
+Create/update .gitignore with:
+
+node_modules
+.next
+.vercel
+.env*
+.DS_Store
+coverage
+*.log
+
+
+Ensure .env.local (with NEXT_PUBLIC_SITE_URL and NEXT_PUBLIC_PLAUSIBLE_DOMAIN) is not committed.
+
+3) CI: GitHub Actions
+
+Add .github/workflows/ci.yml:
+
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm i --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm test -- --run
+
+
+Update package.json (add test scripts):
+
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next-sitemap",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier -w .",
+    "typecheck": "tsc --noEmit",
+    "sitemap": "next-sitemap",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  }
+}
+
+
+4) Minimal tests (Vitest + RTL)
+
+Install dev deps: vitest @testing-library/react @testing-library/jest-dom jsdom @types/testing-library__jest-dom
+
+Create vitest.config.ts:
+
+import { defineConfig } from 'vitest/config';
+export default defineConfig({
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
+  },
+});
+
+
+Create vitest.setup.ts:
+
+import '@testing-library/jest-dom';
+
+
+Add a smoke test __tests__/home.test.tsx:
+
+import { render, screen } from '@testing-library/react';
+import Home from '@/app/page';
+test('renders hero headline', () => {
+  render(<Home />);
+  expect(
+    screen.getByText(/We ship the next generation of product experiences/i)
+  ).toBeInTheDocument();
+});
+
+
+5) Optional: bundle analysis (off by default)
+
+Install @next/bundle-analyzer and wrap in next.config.js:
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' });
+module.exports = withBundleAnalyzer({
+  images: { formats: ['image/avif', 'image/webp'] },
+  async headers() { return [{ source: '/(.*)', headers: securityHeaders }]; },
+});
+
+
+Run locally with ANALYZE=true pnpm build when needed.
+
+6) README.md (editing flow)
+
+Create a concise README.md that explains:
+
+Edit content in /content/work/*.mdx
+
+Drop images in /public/work/<slug>/
+
+pnpm dev to preview; pnpm build to generate sitemap/robots
+
+Env vars: NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+
+Accessibility + motion guidelines (respect reduced motion)
+
+7) GitHub push
+
+If not already initialised, run (or ensure these are set in Replit’s Git UI):
+
+git init
+git add .
+git commit -m "chore: analytics, ci, tests, gitignore"
+git branch -M main
+git remote add origin https://github.com/<your-username>/semimassive-site.git
+git push -u origin main
+
+
+8) Done criteria
+
+pnpm test passes locally.
+
+pnpm build succeeds and still outputs sitemap.xml + robots.txt.
+
+CI runs on GitHub and shows all steps green (typecheck, lint, build, test).
+
+Plausible script only renders in production with domain set.
+
+.env.local is untracked; .gitignore is in place.
+
+Show the updated file tree and CI status summary when finished.
