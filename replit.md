@@ -24,6 +24,16 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Preview environment noindex protection via `getRobotsForEnvironment()`
 - Homepage hero copy tightened to 104 characters with targeted interventions message
 
+**About Page Implementation** (Stage 11):
+- Comprehensive About page at `/about` with 8 structured sections: Mission (hero), Why we exist, What we believe, How we work, Studio network, Principles, Founder, Closing CTA
+- Large, minimalist layout with breathable spacing and calm motion cues respecting prefers-reduced-motion
+- Organization + Person JSON-LD schema for SEO (Nick Strine founder profile)
+- Custom components: `AboutPrinciples` (2×3 animated grid), `FounderCard` (bio with LinkedIn link)
+- `personJsonLd()` helper added to lib/seo.ts for Person schema generation
+- Complete metadata with title "About SemiMassive — Why we exist, what we believe"
+- Accessibility-first design with semantic HTML, focus rings, and logical keyboard navigation
+- Test coverage in `__tests__/about.test.tsx` verifying page structure and content
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
