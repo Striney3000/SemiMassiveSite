@@ -1,0 +1,273 @@
+Build the Neural Matrix (/matrix)
+
+Paste into Replit AI:
+
+Implement a Neural Matrix page at /matrix that presents SemiMassive’s elastic capability as activatable nodes (archetypes). Visual style = geometric grid with calm autonomous pulses; nodes reveal on scroll (respect prefers-reduced-motion). Founder appears among peers with a subtle distinction (no center bias).
+
+1) Data model
+
+Create data/matrix.ts:
+
+export type Pillar = 'Behavioural' | 'AI' | 'Spatial' | 'Research';
+export type Availability = 'summonable' | 'contextual' | 'specialised';
+export type Node = {
+  id: string;            // kebab-case
+  codename: string;      // e.g., "Nova Sato"
+  title: string;         // e.g., "Interface Alchemist — UX/UI & Web"
+  pillars: Pillar[];     // chips to display
+  availability: Availability;
+  blurb: string;         // 1–2 line value statement
+  skills: string[];      // 4–8 concise skills
+  emoji?: string;        // hint glyph
+  isFounder?: boolean;   // subtle peer distinction
+};
+
+export const MATRIX_NODES: Node[] = [
+  // Founder (peer, subtly distinct)
+  {
+    id: 'foundry-lead',
+    codename: 'Nick Strine',
+    title: 'Foundry Lead — Creative Direction & Systems Design',
+    pillars: ['Behavioural','AI','Spatial'],
+    availability: 'summonable',
+    blurb: 'Diagnoses leverage points and leads interventions end-to-end with FlowForge.',
+    skills: ['Systems design','Creative direction','Intervention planning','FlowForge'],
+    emoji: '🜂',
+    isFounder: true
+  },
+  // Strategy
+  {
+    id: 'value-architect',
+    codename: 'Caelum Rowe',
+    title: 'Value Architect — Strategic Framing & ROI',
+    pillars: ['Behavioural','AI'],
+    availability: 'contextual',
+    blurb: 'Bridges product and business momentum. Defines value, metrics, and sponsor clarity.',
+    skills: ['Outcome framing','Business cases','GTM alignment','Exec narrative'],
+    emoji: '🏛️'
+  },
+  // Research / data (proof layer)
+  {
+    id: 'telemetry-architect',
+    codename: 'Vera Shinn',
+    title: 'Telemetry Architect — Behavioural Measurement',
+    pillars: ['Research','Behavioural'],
+    availability: 'contextual',
+    blurb: 'Maps hesitation and momentum; instruments flows to prove adoption deltas.',
+    skills: ['Event taxonomy','Cohort analysis','Experiment design','Dashboards'],
+    emoji: '📈'
+  },
+  // UX/UI + FE
+  {
+    id: 'interface-alchemist',
+    codename: 'Nova Sato',
+    title: 'Interface Alchemist — UX/UI & Web',
+    pillars: ['Behavioural','AI'],
+    availability: 'summonable',
+    blurb: 'Turns system decisions into legible interfaces and fast prototypes.',
+    skills: ['IA','Design systems','React/Next','Motion for meaning'],
+    emoji: '🧪'
+  },
+  // XR / Unity
+  {
+    id: 'spatial-engineer',
+    codename: 'Juno Rah',
+    title: 'Spatial Engineer — XR (Unity)',
+    pillars: ['Spatial'],
+    availability: 'summonable',
+    blurb: 'Builds natural-feeling spatial interactions and performant scenes.',
+    skills: ['Unity','Interaction','Optimization','Scene prototyping'],
+    emoji: '🕶️'
+  },
+  // UE5 Technical Artist
+  {
+    id: 'realtime-artist',
+    codename: 'Rook Ember',
+    title: 'Realtime Technical Artist — UE5',
+    pillars: ['Spatial'],
+    availability: 'specialised',
+    blurb: 'Makes complex scenes readable and responsive at runtime.',
+    skills: ['UE5','Materials','Niagara','Perf tuning'],
+    emoji: '🎛️'
+  },
+  // Systems / platform
+  {
+    id: 'systems-engineer',
+    codename: 'Kellan Pike',
+    title: 'Systems Engineer — Platform',
+    pillars: ['AI','Behavioural'],
+    availability: 'summonable',
+    blurb: 'Bridges product and infra so intelligence becomes reliable and observable.',
+    skills: ['APIs','LLM integration','Guardrails','Telemetry'],
+    emoji: '⚙️'
+  },
+  // Playback / video + 3D
+  {
+    id: 'playback-artist',
+    codename: 'Halley Quinn',
+    title: 'Playback Artist — Video & 3D',
+    pillars: ['Behavioural','Spatial'],
+    availability: 'specialised',
+    blurb: 'Explains complex ideas in seconds with motion and 3D.',
+    skills: ['Explainers','3D animation','Story beats','Editorial'],
+    emoji: '🎞️'
+  }
+];
+
+2) Visual primitives
+
+Create components/NodeGlyph.tsx:
+
+Seeded SVG avatar (use id to hash → gradient angles + dot pattern). Optionally render emoji.
+
+Props: { seed: string; label: string; emoji?: string; className?: string }
+
+A11y: <figure aria-label={${label} glyph}>.
+
+Create components/PillarChips.tsx:
+
+Render chips from pillars with subdued neutral style and aqua focus rings.
+
+3) Node Card (click-to-expand)
+
+components/MatrixNodeCard.tsx:
+
+Props: { node: Node }
+
+Layout: glyph, codename (H3), title, pillar chips, blurb, top 4 skills (chips or small tags).
+
+Founder distinction: if isFounder, add a thin aqua inner glow or 1px outline; no size or position privilege.
+
+Entire card is a single focusable button/div with role="button" + aria-expanded when expanded.
+
+On expand: reveal full skills + availability note (“Summoned as context requires”).
+
+Track clicks: track('Matrix Node Toggle', { id: node.id, expanded }).
+
+4) Grid + “living” behaviour
+
+components/MatrixGrid.tsx:
+
+Props: { nodes: Node[] }
+
+Geometric grid (CSS grid, responsive: 1→2→3→4 cols).
+
+Each card enters with a reveal-on-scroll (IntersectionObserver) — fade/scale in once; skip if prefers-reduced-motion.
+
+Autonomous pulses: each card gets a randomised, low-amplitude box-shadow/opacity pulse every 6–10s (CSS keyframes; random delay). Disable in reduced-motion.
+
+No parallax/glitch; keep calm.
+
+5) Filters
+
+components/MatrixFilters.tsx:
+
+Filter chips: All / Behavioural / AI / Spatial / Research.
+
+Controlled state in page (useState<Pillar | 'All'>).
+
+Chip buttons with aria-pressed, keyboard accessible.
+
+Track: track('Matrix Filter', { pillar }).
+
+6) Page route
+
+app/matrix/page.tsx:
+
+generateMetadata():
+
+title: Neural Matrix — Capability Layer | SemiMassive
+
+description: A living capability layer: specialised nodes activated per intervention. No bench. No org chart.
+
+canonical: ${SITE}/matrix
+
+OG/Twitter tags.
+
+Top intro block (H1 + subcopy):
+
+H1: “The Neural Matrix”
+
+Sub: “A living capability layer we activate per intervention. No bench. No org chart. Just the right capability at the moment of need.”
+
+Small note: “Avatars and codenames are representative. Collaborators vary by engagement.”
+
+Insert MatrixFilters, then MatrixGrid (filtered nodes).
+
+Closing CTA: “See how we assemble interventions →” linking to /services with analytics: track('Nav Click', { from: 'matrix', to: 'services' }).
+
+7) JSON-LD schema
+
+In app/matrix/page.tsx below the intro, inject a lightweight ItemList:
+
+const items = MATRIX_NODES.map((n, i) => ({
+  '@type': 'ListItem',
+  position: i + 1,
+  name: `${n.codename} — ${n.title}`,
+  description: n.blurb
+}));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'SemiMassive Neural Matrix',
+  itemListElement: items
+};
+
+
+Render via <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>.
+
+8) Accessibility
+
+Cards are single-tab focus targets (no nested tab traps).
+
+Expand/collapse uses aria-expanded + aria-controls.
+
+Filters use buttons with aria-pressed and visible focus rings.
+
+Respect prefers-reduced-motion: disable reveal & pulses.
+
+All touch targets ≥ 44×44.
+
+9) Analytics
+
+Matrix Node Toggle, Matrix Filter, Nav Click (matrix→services).
+
+10) Integration (“peek” strip)
+
+Create components/MatrixPeek.tsx:
+
+Row of 6–8 tiny NodeGlyphs with text: “From the Neural Matrix →”.
+
+Link to /matrix; use on /services (under “How we work”) and /about (above Founder block).
+
+Track: track('Nav Click', { from: 'services', to: 'matrix' }) and from about.
+
+11) Styles
+
+Background: warm dark neutral.
+
+Accents: Aqua Electric only for focus, hover outlines, subtle inner glows.
+
+Pulses: use opacity/box-shadow subtlety (0% 0px → 100% 8px blur); random delays; 6–10s cycle; very low amplitude.
+
+12) Tests
+
+Add __tests__/matrix.test.tsx:
+
+Renders H1 “The Neural Matrix”
+
+Renders ≥ 8 nodes
+
+Filter chips exist; filtering to “Spatial” reduces visible nodes appropriately
+
+Toggling a node sets aria-expanded=true
+
+13) Done criteria
+
+/matrix loads with all nodes visible, calm pulses, reveal-on-scroll (no motion if reduced).
+
+Founder node appears among peers with a subtle distinction only.
+
+Pillar filters function; analytics events fire.
+
+JSON-LD present; a11y checks pass; tests pass; build is clean.
