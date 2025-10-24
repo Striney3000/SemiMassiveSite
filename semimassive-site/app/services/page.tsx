@@ -1,35 +1,72 @@
 import type { Metadata } from 'next';
 import { getRobotsForEnvironment } from '@/lib/metadata';
+import { howToJsonLd } from '@/lib/seo';
+import { ServicesContent } from '@/components/ServicesContent';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const url = new URL('/services', base).toString();
 
   return {
-    title: 'Services',
+    title: 'Services — Problems we solve',
     description:
-      'Discover how SemiMassive can help accelerate your product vision with co-development in AI, XR, and behaviour-driven systems.',
+      'We solve adoption challenges through Behavioural Systems, AI Interaction, and Spatial/3D UX.',
     alternates: { canonical: url },
     robots: getRobotsForEnvironment(),
     openGraph: {
       url,
-      title: 'Services | SemiMassive',
+      title: 'Services — Problems we solve | SemiMassive',
       description:
-        'Discover how SemiMassive can help accelerate your product vision with co-development in AI, XR, and behaviour-driven systems.',
+        'We solve adoption challenges through Behavioural Systems, AI Interaction, and Spatial/3D UX.',
     },
     twitter: { card: 'summary_large_image' },
   };
 }
 
 export default function ServicesPage() {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const url = new URL('/services', base).toString();
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'SemiMassive Services',
+    description:
+      'We solve adoption challenges through Behavioural Systems, AI Interaction, and Spatial/3D UX.',
+    areaServed: 'Global',
+    serviceType: 'Behavioural Systems, AI Interaction, Spatial/3D UX',
+    provider: {
+      '@type': 'Organization',
+      name: 'SemiMassive',
+      url: base,
+    },
+  };
+
+  const diagnosticSchema = howToJsonLd({
+    name: '2-Week Diagnostic Process',
+    description:
+      'Our structured approach to identifying and solving product adoption challenges',
+    url,
+    steps: [
+      'Discover: Identify key adoption barriers and user hesitation points',
+      'Map: Create a Gap Map showing where users drop off or lose momentum',
+      'Prototype: Design targeted interventions to address critical issues',
+      'Plan: Deliver an Intervention Plan with prioritized experiment specs',
+    ],
+  });
+
   return (
-    <div className="w-full min-h-screen flex items-center justify-center px-6 md:px-12">
-      <div className="max-w-5xl w-full space-y-6">
-        <h1 className="text-text-100">Services</h1>
-        <p className="text-text-300 text-xl md:text-2xl">
-          Coming soon. Discover how we can help accelerate your product vision.
-        </p>
-      </div>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(diagnosticSchema) }}
+      />
+
+      <ServicesContent />
+    </>
   );
 }

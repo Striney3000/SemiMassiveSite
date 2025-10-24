@@ -1,0 +1,111 @@
+Add sitewide links to Services + “See examples” from accordion items
+
+Paste into Replit AI:
+
+Wire /services from the homepage and footer, and add “See examples” links inside each Services accordion item pointing to relevant /interventions/* pages.
+
+1) Header & Footer: link to Services
+
+Header.tsx
+
+Ensure the nav item labeled “Solutions” points to /interventions (already done).
+
+Add a separate “Services” link pointing to /services (before or after Solutions). Large tap target, aria-current="page" when on /services.
+
+Footer.tsx
+
+In the footer nav, add links: Home → /, Services → /services, Solutions → /interventions, About → /about, Contact → mailto:….
+
+2) Homepage: add Services entry point
+
+app/page.tsx
+
+Under (or near) the hero CTA, add a quiet secondary link:
+
+Text: “See how we approach adoption”
+
+Href: /services
+
+Style: link-style (subtle underline, aqua hover/active states), large touch target.
+
+Track click with:
+track('Nav Click', { from: 'home', to: 'services' })
+
+3) Services accordion: add “See examples” links
+
+app/services/page.tsx (inside each accordion item’s expanded content)
+
+Add a small inline “See examples” row at the end of the bullet list, using your CTA/link style but quiet:
+
+Behavioural Systems item → link to your XDefiant onboarding slice:
+/interventions/xdefiant-onboarding
+
+AI Interaction item → (temporary) link to About/FlowForge anchor or leave a “Coming soon” placeholder:
+For now, link to /about#flowforge if present, else /about
+
+Spatial / 3D item → link to Atlas Obscura VR slice:
+/interventions/atlas-obscura-vr
+
+Example JSX (adjust to your components):
+
+<div className="mt-4 flex gap-6 text-sm">
+  <a href="/interventions/xdefiant-onboarding" className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-[var(--aqua-700)]">
+    See examples: XDefiant onboarding →
+  </a>
+</div>
+
+
+For Spatial:
+
+<div className="mt-4 flex gap-6 text-sm">
+  <a href="/interventions/atlas-obscura-vr" className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-[var(--aqua-700)]">
+    See examples: Atlas Obscura VR →
+  </a>
+</div>
+
+
+For AI Interaction (until a slice exists):
+
+<div className="mt-4 flex gap-6 text-sm">
+  <a href="/about#flowforge" className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-[var(--aqua-700)]">
+    See our method: FlowForge →
+  </a>
+</div>
+
+
+Add analytics on each link click:
+
+onClick={() => track('See Example Click', { from: 'services', item: 'behavioural' })}
+// 'ai' / 'spatial' respectively
+
+4) Accessibility & states
+
+Ensure all added links have visible focus rings (aqua tier), meet 44×44 hit-target guidelines, and inherit reduced-motion settings (no fancy transitions).
+
+5) Tests
+
+tests/services.test.tsx: add assertions that:
+
+The Services page renders “See examples” links for Behavioural and Spatial.
+
+Each link has the correct href and is present in the DOM.
+
+tests/home.test.tsx: assert the secondary link “See how we approach adoption” points to /services.
+
+6) Done criteria
+
+Header + footer include a clear path to /services.
+
+Homepage includes a subtle link to /services.
+
+Services accordion items show “See examples” links:
+
+Behavioural → /interventions/xdefiant-onboarding
+
+Spatial → /interventions/atlas-obscura-vr
+
+AI → /about#flowforge (until an AI slice exists)
+
+Analytics events fire on these links.
+
+Tests pass; build is clean.
