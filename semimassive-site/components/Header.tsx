@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export function Header() {
   const pathname = usePathname();
@@ -20,10 +21,18 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="text-xl md:text-2xl font-heading font-bold text-text-100 no-underline hover:text-aqua-400 transition-colors"
+            className="flex items-center no-underline hover:opacity-80 transition-opacity"
             aria-label="Semimassive home"
           >
-            Semimassive
+            <Image
+              src="/SemiMassive_Logo.svg"
+              alt="Semimassive"
+              width={180}
+              height={36}
+              priority
+              style={{ width: 'auto', height: '2rem' }}
+              className="md:h-9"
+            />
           </Link>
           
           <ul className="flex gap-4 md:gap-6 lg:gap-8">
