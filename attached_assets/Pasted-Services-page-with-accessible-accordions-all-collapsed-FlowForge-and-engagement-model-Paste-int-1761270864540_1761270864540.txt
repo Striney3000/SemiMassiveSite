@@ -1,0 +1,197 @@
+Services page with accessible accordions (all collapsed), FlowForge, and engagement model
+
+Paste into Replit AI:
+
+Create a Services page at app/services/page.tsx framed as “Problems we solve” with an accessible accordion (all panels collapsed by default), calm motion, and SEO. Keep copy concise, outcome-oriented, and aligned with our house style.
+
+1) Route + metadata
+
+Add app/services/page.tsx with generateMetadata():
+
+title: Services — Problems we solve | SemiMassive
+
+description: We solve adoption challenges through Behavioural Systems, AI Interaction, and Spatial/3D UX.
+
+Canonical ${SITE}/services. OG/Twitter tags set.
+
+JSON-LD:
+
+Service schema (name: “SemiMassive Services”, areaServed: Global, serviceType: “Behavioural Systems, AI Interaction, Spatial/3D UX”).
+
+Add a secondary HowTo JSON-LD for the Diagnostic (steps: Discover → Map → Prototype → Plan).
+
+2) Components (new)
+
+Create a minimal, a11y-correct accordion:
+
+components/Accordion.tsx:
+
+Controlled multi-panel, all collapsed initially.
+
+Keyboard + ARIA per WAI pattern:
+
+Each item has a <button> with aria-expanded, aria-controls
+
+Panel has role="region" and aria-labelledby
+
+Arrow/chevron rotates; focus ring uses aqua tiered states.
+
+Props:
+
+type Item = { id: string; title: string; summary?: string; content: React.ReactNode };
+export function Accordion({ items, defaultOpenId }: { items: Item[]; defaultOpenId?: string }) { /* ... */ }
+
+
+All closed by default (ignore defaultOpenId or leave undefined).
+
+components/ServiceCard.tsx (optional wrapper): large padding, subtle border, big tap target; chevron at right.
+
+3) Page layout
+
+Use <Section> wrappers and <Prose> for readable blocks.
+
+Heading structure:
+
+H1: “We help teams solve adoption challenges in next-generation products.” (calm)
+
+H2: “Problems we solve”
+
+H2: “Our method: FlowForge”
+
+H2: “How we work”
+
+H2: “Get a 2-week diagnostic”
+
+Respect prefers-reduced-motion (no expand animation when reduced).
+
+4) Accordion items (content)
+
+Build three items, all collapsed by default. Keep succinct; bullets not paragraphs.
+
+A) Behavioural Systems (Adoption + Emotional Momentum)
+
+Title: Users don’t reach first success — or don’t feel pulled forward after it.
+
+Summary (one line under title): Adoption dies where comprehension breaks; momentum starts at the first win.
+
+Content bullets:
+
+Root causes: hesitation loops, early choice overload, feedback invisibility.
+
+Interventions: first-win path, staged mastery, peripheral feedback that rewards clarity.
+
+Outcome: earlier “aha” moments → higher activation → sustained usage.
+
+B) AI Interaction
+
+Title: AI features exist, but users don’t adopt or trust them.
+
+Summary: Intelligence must be legible, guided, and accountable.
+
+Content bullets:
+
+Root causes: affordance opacity, trust gaps, pacing mismatch.
+
+Interventions: prompt scaffolds, reversible actions, visible competence cues, guardrails.
+
+Outcome: higher feature discovery, successful first attempts, reduced reversion to manual.
+
+C) Spatial / 3D UX
+
+Title: 3D or spatial environments impress, but don’t drive action.
+
+Summary: Orientation is the interface; comprehension beats spectacle.
+
+Content bullets:
+
+Root causes: cognitive geography, unclear affordances, motion/comfort limits.
+
+Interventions: diegetic wayfinding, curiosity-led choices, micro-goals every 90–120s.
+
+Outcome: confident navigation, higher task completion, longer session completion.
+
+5) FlowForge (method)
+
+Short intro: FlowForge is our behavioural engine for adoption: engineer the first win, pace mastery, make feedback legible.
+
+4 bullets:
+
+Find the First Win — compress early choice; ship competence in ≤3 steps.
+
+Paced Mastery — unlock complexity as confidence grows.
+
+Peripheral Feedback — consistent, low-cog signals for guidance & trust.
+
+Telemetry Loop — observe hesitation points; ship micro-nudges.
+
+Optional mini diagram placeholder (div with rule + labels).
+
+6) How we work (engagement model)
+
+One intro line: Senior-led, embedded with your team. Fixed-scope diagnostic; focused pilot; elastic co-dev.
+
+Three sub-blocks (H3 + 1–2 lines each):
+
+Diagnostic (2 weeks) — Gap Map, Intervention Plan, experiment spec.
+
+Pilot (1–2 sprints) — one leap shipped; success criteria defined.
+
+Embedded Co-Dev — ship hard parts; transfer playbooks; uplift design ops.
+
+Add a small line: Founder-led strategic operator; senior-only execution.
+
+7) CTA
+
+Section with H2: “Get a 2-week diagnostic”
+
+Button: “Request an intro” (primary CTA, tracking hook track('CTA Click', { location: 'services' })).
+
+8) Analytics hooks
+
+On accordion toggle: track('Accordion Toggle', { section: 'services', item: <id>, expanded: true|false })
+
+On CTA click: track('CTA Click', { location: 'services' })
+
+9) Styles & motion
+
+Accordion header: big touch target (min 44px), chevron rotates on open, focus ring = aqua.
+
+Reduced motion: no height animation; just show/hide.
+
+Default: animated height/opacity over var(--dur-soft) with var(--ease-out).
+
+10) Accessibility details (must-haves)
+
+Each header button has:
+
+aria-expanded, aria-controls="panel-<id>"
+
+id="accordion-header-<id>"
+
+Each panel has:
+
+role="region", id="panel-<id>", aria-labelledby="accordion-header-<id>"
+
+Arrow keys: Up/Down move focus between headers; Home/End jump to first/last.
+
+11) Tests
+
+__tests__/services.test.tsx:
+
+Renders H1 “We help teams solve adoption challenges…”
+
+All three accordion headers present.
+
+Clicking a header toggles aria-expanded and reveals content snippet.
+
+12) Done criteria
+
+/services renders with all panels collapsed initially.
+
+a11y: headers/regions wired; keyboard navigation works; visible focus rings.
+
+Calm transitions; reduced motion respected.
+
+JSON-LD (Service + HowTo) present; metadata correct.
+
+Analytics events firing; build & tests pass.
