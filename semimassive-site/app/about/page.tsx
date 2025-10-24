@@ -30,7 +30,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function AboutPage() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
-  const organizationSchema = orgJsonLd();
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'SemiMassive',
+    url: base,
+    sameAs: ['https://www.linkedin.com/in/nickstrine'],
+    logo: `${base}/og.png`,
+  };
+
   const founderSchema = personJsonLd({
     name: 'Nick Strine',
     jobTitle: 'Founder, Systems Design / Creative Direction',
@@ -177,7 +185,7 @@ export default function AboutPage() {
           <div className="space-y-12">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-heading text-text-100">
-                Who we are
+                Studio network
               </h2>
               <Prose>
                 <div className="space-y-6 max-w-3xl">
