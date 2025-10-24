@@ -47,6 +47,15 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Hydration-safe implementation: nodes start visible and progressively animate in, Section component always renders motion elements with gated animation props
 - Data model in `data/matrix.ts` with type-safe node definitions including capabilities, specialties, and pillar associations
 
+**FlowForge Reframing** (Stage 13):
+- Reframed FlowForge from product to internal framework/methodology across all pages
+- Services page: H2 changed to "Our method: Adoption Framework", intro reworded to "We use a lightweight framework (internally, 'FlowForge') to design for adoption"
+- Removed broken `/about#flowforge` link, replaced with "Coming soon: AI interaction case studies" placeholder
+- Matrix data: Nick Strine's description updated to "using the FlowForge framework" with "FlowForge framework" in skills
+- Test file updated to expect "Adoption Framework" instead of "FlowForge"
+- JSON-LD schema verified: Services page uses Service + HowTo only (no Product schema)
+- No remaining references imply FlowForge is a purchasable product
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
