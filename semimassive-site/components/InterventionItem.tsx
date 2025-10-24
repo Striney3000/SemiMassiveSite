@@ -14,15 +14,25 @@ export function InterventionItem({ solution, onOpen }: InterventionItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== 'undefined'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !revealed) {
-            const delay = Math.random() * 60 + 60;
-            setTimeout(() => {
+            itemRef.current?.setAttribute('data-revealed', 'true');
+
+            if (prefersReducedMotion) {
               setRevealed(true);
-              itemRef.current?.setAttribute('data-revealed', 'true');
-            }, delay);
+            } else {
+              const delay = Math.random() * 60 + 60;
+              setTimeout(() => {
+                setRevealed(true);
+              }, delay);
+            }
           }
         });
       },
