@@ -19,11 +19,14 @@ function hashString(str: string): number {
 }
 
 export function MatrixGrid({ nodes }: MatrixGridProps) {
-  const [revealedNodes, setRevealedNodes] = useState<Set<string>>(new Set());
+  const [mounted, setMounted] = useState(false);
+  const [revealedNodes, setRevealedNodes] = useState<Set<string>>(new Set(nodes.map(n => n.id)));
   const observerRef = useRef<IntersectionObserver | null>(null);
   const nodeRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
+    setMounted(true);
+    
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
@@ -31,28 +34,33 @@ export function MatrixGrid({ nodes }: MatrixGridProps) {
       return;
     }
 
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const nodeId = entry.target.getAttribute('data-node-id');
-            if (nodeId) {
-              setRevealedNodes((prev) => new Set(prev).add(nodeId));
-              observerRef.current?.unobserve(entry.target);
-            }
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const timeoutId = setTimeout(() => {
+      setRevealedNodes(new Set());
 
-    nodeRefs.current.forEach((element) => {
-      if (observerRef.current) {
-        observerRef.current.observe(element);
-      }
-    });
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const nodeId = entry.target.getAttribute('data-node-id');
+              if (nodeId) {
+                setRevealedNodes((prev) => new Set(prev).add(nodeId));
+                observerRef.current?.unobserve(entry.target);
+              }
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      nodeRefs.current.forEach((element) => {
+        if (observerRef.current) {
+          observerRef.current.observe(element);
+        }
+      });
+    }, 100);
 
     return () => {
+      clearTimeout(timeoutId);
       observerRef.current?.disconnect();
     };
   }, [nodes]);
