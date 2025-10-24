@@ -20,8 +20,8 @@ export const MATRIX_NODES: Node[] = [
     title: 'Foundry Lead — Creative Direction & Systems Design',
     pillars: ['Behavioural','AI','Spatial'],
     availability: 'summonable',
-    blurb: 'Diagnoses leverage points and leads interventions end-to-end with FlowForge.',
-    skills: ['Systems design','Creative direction','Intervention planning','FlowForge'],
+    blurb: 'Diagnoses leverage points and leads interventions using the FlowForge framework.',
+    skills: ['Systems design','Creative direction','Intervention planning','FlowForge framework'],
     emoji: '🜂',
     isFounder: true
   },

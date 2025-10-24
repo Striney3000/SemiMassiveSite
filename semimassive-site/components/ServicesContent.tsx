@@ -77,13 +77,9 @@ export function ServicesContent() {
             </p>
           </div>
           <div className="mt-6 pt-4 border-t border-base-800">
-            <Link
-              href="/about#flowforge"
-              onClick={() => track('See Example Click', { from: 'services', item: 'ai' })}
-              className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
-            >
-              See examples: FlowForge →
-            </Link>
+            <p className="text-sm text-text-300 italic">
+              Coming soon: AI interaction case studies
+            </p>
           </div>
         </div>
       ),
@@ -168,11 +164,11 @@ export function ServicesContent() {
         <Section animate={true}>
           <div className="space-y-8">
             <h2 className="text-3xl md:text-4xl font-heading text-text-100">
-              Our method: FlowForge
+              Our method: Adoption Framework
             </h2>
             <Prose>
               <p className="text-lg text-text-300 leading-relaxed">
-                FlowForge is our behavioural engine for adoption: engineer the first win, pace mastery, make feedback legible.
+                We use a lightweight framework (internally, "FlowForge") to design for adoption:
               </p>
               <div className="space-y-4 mt-6">
                 <div className="border-l-2 border-aqua-400 pl-6">

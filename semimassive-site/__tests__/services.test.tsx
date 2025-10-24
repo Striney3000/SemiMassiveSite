@@ -82,10 +82,10 @@ describe('Services Page', () => {
       });
     });
 
-    it('should render FlowForge section with all principles', () => {
+    it('should render Adoption Framework section with all principles', () => {
       render(<ServicesContent />);
       
-      expect(screen.getByText(/Our method: FlowForge/i)).toBeTruthy();
+      expect(screen.getByText(/Our method: Adoption Framework/i)).toBeTruthy();
       expect(screen.getByText(/Find the First Win/i)).toBeTruthy();
       expect(screen.getByText(/Paced Mastery/i)).toBeTruthy();
       expect(screen.getByText(/Peripheral Feedback/i)).toBeTruthy();
