@@ -34,6 +34,19 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Accessibility-first design with semantic HTML, focus rings, and logical keyboard navigation
 - Test coverage in `__tests__/about.test.tsx` verifying page structure and content
 
+**Neural Matrix Page Implementation** (Stage 12):
+- Live capability layer at `/matrix` showcasing 8 specialized team nodes (founder and collaborators)
+- Filterable by capability pillars: All, Behavioural, AI, Spatial, Research
+- Interactive node cards with expand/collapse for detailed capability views
+- Custom components: `NodeGlyph` (seeded SVG avatars with unique patterns per node), `MatrixNodeCard` (expandable cards with hover states), `MatrixGrid` (responsive grid with scroll-reveal animations), `MatrixFilters` (accessible button group)
+- Nick Strine (founder) features subtle aqua inner glow in glyph, appears among peers without center bias
+- Scroll-reveal animations using IntersectionObserver, respects `prefers-reduced-motion` preference
+- Full keyboard navigation support with 44px tap targets and ARIA attributes
+- Analytics tracking: Matrix Node Toggle, Matrix Filter, and Nav Click events via `lib/analytics.ts`
+- CollectiveOfExperts JSON-LD schema with complete team member details for SEO
+- Hydration-safe implementation: nodes start visible and progressively animate in, Section component always renders motion elements with gated animation props
+- Data model in `data/matrix.ts` with type-safe node definitions including capabilities, specialties, and pillar associations
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
