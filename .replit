@@ -35,5 +35,5 @@ channel = "stable-25_05"
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "cd semimassive-site && NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm run start"]
-build = ["bash", "-c", "cd semimassive-site && NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm install && NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm run build"]
+run = ["bash", "-c", "NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm --dir semimassive-site run start"]
+build = ["bash", "-c", "NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm --dir semimassive-site install && NEXT_PUBLIC_SITE_URL=https://semimassive.com pnpm --dir semimassive-site run build"]
