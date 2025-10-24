@@ -124,3 +124,17 @@ export function interventionJsonLdRouter(p: {
     authorName: p.authorName,
   });
 }
+
+export const personJsonLd = (p: {
+  name: string;
+  jobTitle?: string;
+  url?: string;
+  sameAs?: string[];
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: p.name,
+  jobTitle: p.jobTitle,
+  url: p.url,
+  sameAs: p.sameAs,
+});

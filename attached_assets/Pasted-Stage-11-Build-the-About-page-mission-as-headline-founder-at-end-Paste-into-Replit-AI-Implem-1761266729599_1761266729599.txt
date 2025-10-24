@@ -1,0 +1,175 @@
+Stage 11 — Build the About page (mission as headline, founder at end)
+
+Paste into Replit AI:
+
+Implement the About page at app/about/page.tsx with large, minimalist layout, calm motion cues, and proper SEO/schema. Use our existing tokens (Warm Dark Neutral + Aqua Electric), large typography, and Section/Prose/CTA components.
+Tone: confident & calm. Structure: Hybrid (philosophy + capability + partner).
+
+1) Route + metadata
+
+Create/replace app/about/page.tsx with:
+
+export const metadata or generateMetadata() returning:
+
+title: About SemiMassive — Why we exist, what we believe
+
+description: We help companies evolve from legacy UX to emergent interaction models — AI, XR, and behaviour systems.
+
+Canonical: ${SITE}/about
+
+Twitter/OG tags
+
+Inject Organization + Person JSON-LD (reuse orgJsonLd() from lib/seo.ts; add a small inline personJsonLd() helper if none exists). Person should be Nick Strine with “Founder, Systems Design / Creative Direction”.
+
+2) Layout
+
+Use big, breathable sections via <Section> and readable content via <Prose>.
+
+Heading hierarchy: H1 (mission), then H2 for each section, H3 inside “Principles”.
+
+Add an optional subtle section reveal (using our motion helpers) once per section; respect prefers-reduced-motion.
+
+Include a visible skip to content anchor target id="content".
+
+3) Content blocks (copy placeholders)
+Implement these sections in order:
+
+(A) Hero / Mission (H1)
+
+H1 (single line):
+“We help companies evolve from legacy UX to emergent interaction models.”
+
+One-sentence subline (≤ 150 chars):
+“SemiMassive bridges relic UI patterns and new ways of interacting with AI, spatial interfaces, and 3D systems.”
+
+Primary CTA: “Book a 15-min intro” (same component & tracking hook).
+
+(B) Why we exist (Mission context)
+Short paragraph block (≤ 120 words):
+“The next era of product design isn’t click-only or screen-only. AI, spatial computing, and simulation have outgrown flat UX. Most organisations need help crossing that frontier — not by re-skinning interfaces, but by evolving how people interact with intelligence and complex systems. SemiMassive is a studio built for that transition.”
+
+(C) What we believe (Philosophy)
+Two short paragraphs (≤ 90 words each), then a 3-bullet list:
+
+Para 1: “Design is not only functional; it’s felt. Products become intuitive when interaction creates momentum instead of friction.”
+
+Para 2: “We treat flow and enjoyment as behavioural infrastructure — the basis for retention, confidence, and meaning.”
+
+Bullets (actionable maxims):
+
+“Engineer feel, not just frames.”
+
+“Clarity beats choice early; mastery can wait.”
+
+“Feedback must be peripheral, consistent, legible.”
+
+(D) How we work (Operating model)
+Single paragraph then 3 columns (cards or list) describing engagement modes:
+
+Para: “We embed with internal teams to diagnose leverage points, prototype targeted interventions, and scale what works.”
+
+Columns:
+
+Strategic Advisory — opportunity mapping for AI/XR/behaviour.
+
+Product & Org Uplift — design ops, onboarding/retention systems.
+
+Embedded Co-Dev — ship hard parts inside your stack.
+
+(E) Who we are (Studio network)
+Two short paragraphs:
+
+Para 1: “SemiMassive operates as a distributed expert network — UX architects, game designers, artists, and engineers from AAA, SaaS, and immersive.”
+
+Para 2: “Senior-only execution. No theatre. No hand-offs that dilute outcomes.”
+
+(F) Principles (Grid of 6)
+Render as a 2×3 grid (large type, no chrome). Items:
+
+Human before algorithm
+
+Systems with soul
+
+Design for flow
+
+Clarity over cleverness
+
+Small teams, large leverage
+
+Emotion is a metric
+
+(G) Founder block (end of page)
+Visually modest block with a small avatar (optional) and concise bio.
+
+Heading: “Led by Nick Strine”
+
+2–3 sentences:
+“Systems designer and creative director with 20 years in gaming, media, and product innovation. Led large-scale launches and first-of-type experiences across Ubisoft, Wargaming, Atlas Obscura, and Meta-backed XR projects. Focused on emergent interaction models where traditional UX breaks down.”
+
+Optional links: LinkedIn (and email), open in new tab with rel="noopener noreferrer".
+
+(H) Closing CTA
+
+Copy: “Let’s explore how your product can evolve.”
+
+Button: “Book a 15-min intro”
+
+4) Components & styles
+
+Add AboutPrinciples.tsx (grid), FounderCard.tsx (avatar + text), both minimal and responsive with large tap targets.
+
+Ensure headings use font-heading, body font-body; generous line-length (60–72ch), line-height 1.6–1.75.
+
+Keep accent usage sparse (links/CTA/focus rings only).
+
+5) SEO / Schema
+
+Use orgJsonLd() in app/about/page.tsx.
+
+Add a small personJsonLd() in lib/seo.ts:
+
+export const personJsonLd = (p:{ name:string; jobTitle?:string; url?:string; sameAs?:string[] }) => ({
+  '@context':'https://schema.org',
+  '@type':'Person',
+  name:p.name,
+  jobTitle:p.jobTitle,
+  url:p.url,
+  sameAs:p.sameAs
+});
+
+
+Render both JSON-LD blocks in the page (Organization + Person).
+
+Internal links: from homepage footer and header “About” → /about.
+
+6) A11y & motion
+
+Respect prefers-reduced-motion: no reveals/animations in that mode.
+
+Focus rings use tiered aqua; keyboard order logical.
+
+Use semantic landmarks; ensure H1 only appears once.
+
+7) Tests (simple)
+
+Add __tests__/about.test.tsx:
+
+import { render, screen } from '@testing-library/react';
+import About from '@/app/about/page';
+test('renders mission headline', () => {
+  render(<About />);
+  expect(screen.getByRole('heading', {
+    name: /We help companies evolve from legacy UX to emergent interaction models/i
+  })).toBeInTheDocument();
+});
+
+
+8) Done criteria
+
+Page renders with: Mission H1 → Why → Beliefs → How we work → Studio network → Principles grid → Founder block (end) → CTA.
+
+Canonical & OG/Twitter set; Organization + Person JSON-LD present.
+
+Large, calm, minimal; motion assists orientation only.
+
+Test passes; build is clean.
