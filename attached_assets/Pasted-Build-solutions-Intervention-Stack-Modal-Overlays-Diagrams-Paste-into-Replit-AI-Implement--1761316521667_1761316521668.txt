@@ -1,0 +1,244 @@
+Build /solutions (Intervention Stack + Modal Overlays + Diagrams)
+
+Paste into Replit AI:
+
+Implement a Solutions page at app/solutions/page.tsx that presents our four named interventions as a progressive-reveal vertical stack. Each opens a centered overlay modal with medium-depth content and a line-based minimal SVG diagram. Tone: calm, senior, systems-led. Engineering/backbone mentioned at medium strength (no partner branding). A11y complete; reduced-motion respected; JSON-LD included.
+
+1) Data
+
+Create data/solutions.ts:
+
+export type Pillar = 'Behavioural' | 'AI' | 'Spatial' | 'Research';
+export type Solution = {
+  id: string;
+  title: string;
+  subtitle: string;       // one-liner
+  pillars: Pillar[];      // chips
+  problem: string;        // what breaks (2–3 sentences)
+  intervention: string[]; // bullets (how we fix)
+  engineering: string;    // when/why we extend into build (medium tone)
+  matrixNodes: string[];  // ids that usually activate (from MATRIX_NODES)
+  ctaLabel?: string;
+  ctaHref?: string;
+};
+
+export const SOLUTIONS: Solution[] = [
+  {
+    id: 'ai-legibility-layer',
+    title: 'Legibility Layer',
+    subtitle: 'Make AI affordances learnable and trustworthy.',
+    pillars: ['AI','Behavioural'],
+    problem: 'AI features often ship as opaque buttons or sidecars. Users can’t see what they do, how to start, or whether outcomes are safe—and revert to manual workflows.',
+    intervention: [
+      'Expose intent → visible affordances with exampleable prompts and reversible actions.',
+      'Scaffold first attempts → guardrails, preview states, competence cues.',
+      'Make accountability legible → show sources, scope, and limits inline.'
+    ],
+    engineering: 'When the intervention moves to build, we route through a dedicated engineering layer to wire prompt scaffolds, safe-ops, and telemetry for trust signals—so adoption ships, not just the UI.',
+    matrixNodes: ['interface-alchemist','systems-engineer','telemetry-architect']
+  },
+  {
+    id: 'first-win-architecture',
+    title: 'First-Win Architecture',
+    subtitle: 'Turn first contact into first success.',
+    pillars: ['Behavioural'],
+    problem: 'Most products front-load choice and complexity. Users hesitate before they experience value, and adoption dies before momentum begins.',
+    intervention: [
+      'Compress early choice → guided entry path to a real outcome in ≤3 steps.',
+      'Stage mastery → unlock complexity only after confidence increases.',
+      'Reward clarity → peripheral feedback that confirms progress without noise.'
+    ],
+    engineering: 'For production rollout, we add routing logic, state gating, and event hooks so “first success” is both consistent and measurable across cohorts.',
+    matrixNodes: ['foundry-lead','interface-alchemist','telemetry-architect']
+  },
+  {
+    id: 'friction-surgery',
+    title: 'Friction Surgery',
+    subtitle: 'Micro-interventions in critical flows.',
+    pillars: ['Behavioural','AI'],
+    problem: 'A few high-leverage moments create hesitation loops—ambiguous choices, invisible progress, brittle errors. Small fixes here change overall behaviour disproportionately.',
+    intervention: [
+      'Identify hesitation hotspots via trace review and session patterns.',
+      'Insert micro-cues → copy, sequencing, affordance strengthening, recovery paths.',
+      'Validate with fast experiments → A/B or time-series deltas.'
+    ],
+    engineering: 'We wire small, safe changes into live flows with feature flags and observability—so improvements land quickly and stay reversible.',
+    matrixNodes: ['foundry-lead','systems-engineer','telemetry-architect']
+  },
+  {
+    id: 'signal-instrumentation',
+    title: 'Signal Instrumentation',
+    subtitle: 'Prove behavioural change with telemetry.',
+    pillars: ['Research','Behavioural','AI'],
+    problem: 'Without a proof loop, design changes drift into opinion. Teams can’t see hesitation points, first-win rates, or how AI affects task completion.',
+    intervention: [
+      'Define an adoption taxonomy → events for success, hesitation, recovery.',
+      'Instrument flows → cohorts, milestones, confidence proxies.',
+      'Create visible dashboards → deltas that support product decisions.'
+    ],
+    engineering: 'We implement event schemas, lightweight pipelines, and dashboards so adoption becomes observable—and defendable to sponsors.',
+    matrixNodes: ['telemetry-architect','systems-engineer','foundry-lead']
+  }
+];
+
+2) Components
+
+(a) Pillar chips — components/PillarChips.tsx (reuse if exists)
+
+(b) Line Diagram — components/LineDiagram.tsx
+
+Purpose: render line-based minimal SVG per solution (no data fetch).
+
+Props: { variant: 'ai-legibility-layer'|'first-win-architecture'|'friction-surgery'|'signal-instrumentation', className?: string }
+
+For each variant, draw a thin-stroke SVG (strokeWidth ~1.25) with neutral strokes and sparse aqua accents. Examples:
+
+first-win-architecture: 3-step path line → bold check at step 3; subtle gated branches faint.
+
+ai-legibility-layer: input → scaffold box → preview → confirm, with a looped “reversible” arrow.
+
+friction-surgery: flow line with 3 hazard triangles (hotspots) → patched by small “stitches”.
+
+signal-instrumentation: nodes → event taps → timeline strip with up/down ticks.
+
+Respect reduced-motion (no animations). Otherwise, allow a very subtle path-dash offset on first reveal.
+
+(c) Modal Overlay — components/OverlayModal.tsx
+
+Centered modal with focus trap (use react-aria/headless or custom).
+
+Props: { open: boolean; onClose: () => void; titleId: string; children: React.ReactNode }
+
+Markup: backdrop (role="presentation"), dialog container with role="dialog" aria-modal="true" aria-labelledby={titleId}.
+
+Close via: Escape key, backdrop click, and a visible close button (aria-label="Close").
+
+Motion: scale/opacity in ~160–200ms; disable in prefers-reduced-motion.
+
+(d) Stack Item — components/InterventionItem.tsx
+
+Renders title, subtitle, pillar chips, and an Open button.
+
+Exposes a onOpen(id) callback (page controls which overlay to show).
+
+Large hit area; visible focus rings; progressive reveal hook (see §4).
+
+3) Page route
+
+Create app/solutions/page.tsx:
+
+generateMetadata():
+
+title: Solutions — Intervention Playbook | SemiMassive
+
+description: Four repeatable interventions that increase adoption: Legibility Layer, First-Win Architecture, Friction Surgery, Signal Instrumentation.
+
+canonical: ${SITE}/solutions
+
+Top intro (H1 + short subcopy):
+
+H1: “Solutions”
+
+Sub: “Our interventions turn hesitation into momentum. Each is a repeatable pattern we apply inside complex products.”
+
+Progressive reveal list of the 4 InterventionItems (see §4).
+
+When an item is opened, render OverlayModal with:
+
+H2 (id = solution-title-<id>)
+
+mini meta row (pillar chips + “Usually activates:” with 2–3 Matrix node names)
+
+3 blocks: Problem → Intervention → Build layer
+
+LineDiagram for the variant (full width on mobile, ~540px max on desktop)
+
+Small CTA row: “See how we engage →” linking to /services
+
+4) Progressive reveal (scroll)
+
+Use IntersectionObserver per InterventionItem to add a data-revealed class on first entry.
+
+CSS: translateY(12px) + opacity 0 → to 0/1 over ~220ms with easing; disabled under prefers-reduced-motion.
+
+Stagger with a small randomized delay (60–120ms).
+
+5) Accessibility
+
+Each item’s Open button has aria-controls="solution-<id>" and sets focus into the modal on open.
+
+Modal: role="dialog" aria-modal="true" aria-labelledby="solution-title-<id>".
+
+Focus trap within modal; return focus to triggering button on close.
+
+Keyboard: Escape closes; Tab cycles within modal; Tab/Shift+Tab wrap correctly.
+
+Touch targets ≥ 44×44; visible focus rings (aqua).
+
+6) Engineering tone (medium) copy, standardize
+
+In each overlay’s Build layer block, include a single sentence:
+“When the intervention progresses into build, we route through a dedicated engineering layer to deploy safely, observably, and at pace.”
+
+7) Matrix tie-in
+
+Beneath pillar chips, show: “Usually activates:” followed by 2–3 node names based on matrixNodes.
+
+Each name is a quiet link to /matrix#<node-id> (hash anchors optional; or just link to /matrix).
+
+8) JSON-LD
+
+On this page, render a ItemList of CreativeWork entries for the four solutions:
+
+const items = SOLUTIONS.map((s, i) => ({
+  '@type': 'ListItem',
+  position: i + 1,
+  item: {
+    '@type': 'CreativeWork',
+    name: s.title,
+    description: s.subtitle
+  }
+}));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'SemiMassive Solutions',
+  itemListElement: items
+};
+
+
+Inject with <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>.
+
+9) Analytics
+
+On item reveal: track('Solution Reveal', { id })
+
+On open modal: track('Solution Open', { id })
+
+On close modal: track('Solution Close', { id })
+
+On CTA click in modal: track('CTA Click', { from: 'solutions', id })
+
+10) Styles
+
+Background: warm dark neutral; large typography; airy spacing.
+
+Stack items separated by a faint vertical spine (1px line) running the left gutter on desktop; items slightly “attach” to the spine with a short connector line on hover/focus.
+
+Diagrams: neutral strokes; a single aqua accent per diagram; no drop shadows; no gradients.
+
+11) Tests — __tests__/solutions.test.tsx
+
+Renders H1 “Solutions”.
+
+Progressive reveal: items acquire data-revealed="true" when scrolled into view (mock IntersectionObserver).
+
+Clicking “Open” on Legibility Layer renders a dialog with role="dialog" and a heading containing “Legibility Layer”.
+
+Escape key closes the dialog and returns focus to the trigger.
+
+JSON-LD script present.
+
+12) Done criteria
+
+/solutions loads with four stack items; each reveals on scroll; overlays open centered with diagram + blocks: Problem / Intervention / Build layer; pillar chips + matrix tie-in shown; CTA to /services; a11y + analytics implemented; tests pass; build clean.
