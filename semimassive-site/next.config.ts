@@ -64,16 +64,6 @@ const nextConfig: NextConfig = {
         destination: '/interventions/:slug*',
         permanent: true,
       },
-      {
-        source: '/solutions',
-        destination: '/interventions',
-        permanent: true,
-      },
-      {
-        source: '/solutions/:slug*',
-        destination: '/interventions/:slug*',
-        permanent: true,
-      },
     ];
   },
 };
