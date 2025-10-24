@@ -125,6 +125,39 @@ describe('Services Page', () => {
         expect(button.hasAttribute('aria-controls')).toBe(true);
       });
     });
+
+    it('should render "See examples" links when accordion is expanded', () => {
+      render(<ServicesContent />);
+      
+      const firstButton = screen.getByRole('button', {
+        name: /Users don't reach first success/i,
+      });
+      
+      fireEvent.click(firstButton);
+      
+      const behaviouralLink = screen.getByText(/See examples: XDefiant onboarding/i);
+      expect(behaviouralLink).toBeTruthy();
+      expect(behaviouralLink.getAttribute('href')).toBe('/interventions/xdefiant-onboarding');
+    });
+
+    it('should track "See Example Click" events', () => {
+      const trackSpy = vi.spyOn(analytics, 'track');
+      render(<ServicesContent />);
+      
+      const spatialButton = screen.getByRole('button', {
+        name: /3D or spatial environments impress/i,
+      });
+      
+      fireEvent.click(spatialButton);
+      
+      const spatialLink = screen.getByText(/See examples: Atlas Obscura VR/i);
+      fireEvent.click(spatialLink);
+      
+      expect(trackSpy).toHaveBeenCalledWith('See Example Click', {
+        from: 'services',
+        item: 'spatial',
+      });
+    });
   });
 
   describe('ServicesPage server component', () => {

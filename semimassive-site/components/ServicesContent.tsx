@@ -35,6 +35,15 @@ export function ServicesContent() {
               Earlier "aha" moments → higher activation → sustained usage
             </p>
           </div>
+          <div className="mt-6 pt-4 border-t border-base-800">
+            <a
+              href="/interventions/xdefiant-onboarding"
+              onClick={() => track('See Example Click', { from: 'services', item: 'behavioural' })}
+              className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
+            >
+              See examples: XDefiant onboarding →
+            </a>
+          </div>
         </div>
       ),
     },
@@ -66,6 +75,15 @@ export function ServicesContent() {
               Higher feature discovery, successful first attempts, reduced reversion to manual workflows
             </p>
           </div>
+          <div className="mt-6 pt-4 border-t border-base-800">
+            <a
+              href="/about#flowforge"
+              onClick={() => track('See Example Click', { from: 'services', item: 'ai' })}
+              className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
+            >
+              See examples: FlowForge →
+            </a>
+          </div>
         </div>
       ),
     },
@@ -96,6 +114,15 @@ export function ServicesContent() {
             <p className="text-text-300">
               Confident navigation, higher task completion, longer session completion
             </p>
+          </div>
+          <div className="mt-6 pt-4 border-t border-base-800">
+            <a
+              href="/interventions/atlas-obscura-vr"
+              onClick={() => track('See Example Click', { from: 'services', item: 'spatial' })}
+              className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
+            >
+              See examples: Atlas Obscura VR →
+            </a>
           </div>
         </div>
       ),

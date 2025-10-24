@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { HeroCTA } from '@/components/HeroCTA';
 import { HomePageWrapper } from '@/components/HomePageWrapper';
+import { ServicesLink } from '@/components/ServicesLink';
 import { getRobotsForEnvironment } from '@/lib/metadata';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,6 +41,8 @@ export default function Home() {
             </div>
 
             <HeroCTA />
+            
+            <ServicesLink />
 
             <div className="flex flex-wrap gap-4 pt-8">
               <span className="proof-chip">12M+ player launch</span>
