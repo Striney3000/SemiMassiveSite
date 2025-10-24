@@ -168,7 +168,7 @@ export function ServicesContent() {
             </h2>
             <Prose>
               <p className="text-lg text-text-300 leading-relaxed">
-                We use a lightweight framework (internally, "FlowForge") to design for adoption:
+                We use a lightweight framework (internally, &quot;FlowForge&quot;) to design for adoption:
               </p>
               <div className="space-y-4 mt-6">
                 <div className="border-l-2 border-aqua-400 pl-6">
