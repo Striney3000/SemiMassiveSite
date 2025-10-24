@@ -88,7 +88,7 @@ export default function AboutPage() {
               </h2>
               <Prose>
                 <p className="text-lg md:text-xl text-text-200 leading-relaxed max-w-3xl">
-                  The next era of product design isn't click-only or
+                  The next era of product design isn&apos;t click-only or
                   screen-only. AI, spatial computing, and simulation have
                   outgrown flat UX. Most organisations need help crossing that
                   frontier — not by re-skinning interfaces, but by evolving how
@@ -109,7 +109,7 @@ export default function AboutPage() {
               <Prose>
                 <div className="space-y-6 max-w-3xl">
                   <p className="text-lg md:text-xl text-text-200 leading-relaxed">
-                    Design is not only functional; it's felt. Products become
+                    Design is not only functional; it&apos;s felt. Products become
                     intuitive when interaction creates momentum instead of
                     friction.
                   </p>
@@ -224,7 +224,7 @@ export default function AboutPage() {
         <Section className="max-w-5xl mx-auto">
           <div className="space-y-8 text-center">
             <p className="text-2xl md:text-3xl font-heading text-text-100">
-              Let's explore how your product can evolve.
+              Let&apos;s explore how your product can evolve.
             </p>
             <div>
               <CTA

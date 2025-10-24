@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { Prose } from '@/components/Prose';
 import { Accordion, AccordionItem } from '@/components/Accordion';
@@ -18,7 +19,7 @@ export function ServicesContent() {
             <ul className="space-y-2 text-text-300">
               <li>• Hesitation loops where users pause and never return</li>
               <li>• Early choice overload before confidence is built</li>
-              <li>• Feedback invisibility—users can\'t tell if they\'re succeeding</li>
+              <li>• Feedback invisibility—users can&apos;t tell if they&apos;re succeeding</li>
             </ul>
           </div>
           <div>
@@ -32,17 +33,17 @@ export function ServicesContent() {
           <div>
             <h4 className="font-heading font-semibold text-aqua-400 mb-2">Outcome</h4>
             <p className="text-text-300">
-              Earlier "aha" moments → higher activation → sustained usage
+              Earlier &quot;aha&quot; moments → higher activation → sustained usage
             </p>
           </div>
           <div className="mt-6 pt-4 border-t border-base-800">
-            <a
+            <Link
               href="/interventions/xdefiant-onboarding"
               onClick={() => track('See Example Click', { from: 'services', item: 'behavioural' })}
               className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
             >
               See examples: XDefiant onboarding →
-            </a>
+            </Link>
           </div>
         </div>
       ),
@@ -56,7 +57,7 @@ export function ServicesContent() {
           <div>
             <h4 className="font-heading font-semibold text-text-100 mb-2">Root causes</h4>
             <ul className="space-y-2 text-text-300">
-              <li>• Affordance opacity—unclear what AI can or can\'t do</li>
+              <li>• Affordance opacity—unclear what AI can or can&apos;t do</li>
               <li>• Trust gaps from unpredictable or opaque outputs</li>
               <li>• Pacing mismatch between user intent and AI response time</li>
             </ul>
@@ -76,13 +77,13 @@ export function ServicesContent() {
             </p>
           </div>
           <div className="mt-6 pt-4 border-t border-base-800">
-            <a
+            <Link
               href="/about#flowforge"
               onClick={() => track('See Example Click', { from: 'services', item: 'ai' })}
               className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
             >
               See examples: FlowForge →
-            </a>
+            </Link>
           </div>
         </div>
       ),
@@ -96,7 +97,7 @@ export function ServicesContent() {
           <div>
             <h4 className="font-heading font-semibold text-text-100 mb-2">Root causes</h4>
             <ul className="space-y-2 text-text-300">
-              <li>• Cognitive geography—users can\'t build a mental map</li>
+              <li>• Cognitive geography—users can&apos;t build a mental map</li>
               <li>• Unclear affordances in 3D space</li>
               <li>• Motion and comfort limits causing early exits</li>
             </ul>
@@ -116,13 +117,13 @@ export function ServicesContent() {
             </p>
           </div>
           <div className="mt-6 pt-4 border-t border-base-800">
-            <a
+            <Link
               href="/interventions/atlas-obscura-vr"
               onClick={() => track('See Example Click', { from: 'services', item: 'spatial' })}
               className="inline-flex items-center text-sm text-text-300 hover:text-aqua-400 active:text-aqua-600 transition-colors underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-700 rounded px-2 py-2 min-h-[44px]"
             >
               See examples: Atlas Obscura VR →
-            </a>
+            </Link>
           </div>
         </div>
       ),
@@ -262,13 +263,13 @@ export function ServicesContent() {
               Get a 2-week diagnostic
             </h2>
             <div>
-              <a
+              <Link
                 href="#contact"
                 className="btn-primary no-underline"
                 onClick={handleCtaClick}
               >
                 Request an intro
-              </a>
+              </Link>
             </div>
           </div>
         </Section>
