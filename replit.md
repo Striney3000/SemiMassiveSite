@@ -38,7 +38,7 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Live capability layer at `/matrix` showcasing 8 specialized team nodes (founder and collaborators)
 - Filterable by capability pillars: All, Behavioural, AI, Spatial, Research
 - Interactive node cards with expand/collapse for detailed capability views
-- Custom components: `NodeGlyph` (seeded SVG avatars with unique patterns per node), `MatrixNodeCard` (expandable cards with hover states), `MatrixGrid` (responsive grid with scroll-reveal animations), `MatrixFilters` (accessible button group)
+- Custom components: `NodeGlyph` (seeded SVG avatars with unique patterns per node, now with support for custom avatar images), `MatrixNodeCard` (expandable cards with hover states), `MatrixGrid` (responsive grid with scroll-reveal animations), `MatrixFilters` (accessible button group)
 - Nick Strine (founder) features subtle aqua inner glow in glyph, appears among peers without center bias
 - Scroll-reveal animations using IntersectionObserver, respects `prefers-reduced-motion` preference
 - Full keyboard navigation support with 44px tap targets and ARIA attributes
@@ -46,6 +46,12 @@ Semimassive is a modern marketing website for a product development consultancy 
 - CollectiveOfExperts JSON-LD schema with complete team member details for SEO
 - Hydration-safe implementation: nodes start visible and progressively animate in, Section component always renders motion elements with gated animation props
 - Data model in `data/matrix.ts` with type-safe node definitions including capabilities, specialties, and pillar associations
+- **Profile Avatars** (October 25, 2025): Added custom avatar images for 4 team members:
+  - Ray_Chaser.png → Caelum Rowe (Value Architect)
+  - Code_Monkey.png → Juno Rah (Spatial Engineer)
+  - Flo_Status.png → Vera Shinn (Telemetry Architect)
+  - Max_GPU.png → Rook Ember (Realtime Technical Artist)
+  - NodeGlyph component now displays avatar images when available, falling back to generated SVG glyphs with emojis
 
 **FlowForge Reframing** (Stage 13):
 - Reframed FlowForge from product to internal framework/methodology across all pages

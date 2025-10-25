@@ -2,6 +2,7 @@ interface NodeGlyphProps {
   seed: string;
   label: string;
   emoji?: string;
+  avatar?: string;
   className?: string;
 }
 
@@ -15,7 +16,7 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-export function NodeGlyph({ seed, label, emoji, className = '' }: NodeGlyphProps) {
+export function NodeGlyph({ seed, label, emoji, avatar, className = '' }: NodeGlyphProps) {
   const hash = hashString(seed);
   
   const angle1 = (hash % 360);
@@ -30,6 +31,21 @@ export function NodeGlyph({ seed, label, emoji, className = '' }: NodeGlyphProps
     const size = 3 + ((hash * i) % 4);
     return { x, y, size };
   });
+
+  if (avatar) {
+    return (
+      <figure 
+        className={`relative ${className}`}
+        aria-label={`${label} avatar`}
+      >
+        <img
+          src={avatar}
+          alt={label}
+          className="w-full h-full rounded-lg object-cover"
+        />
+      </figure>
+    );
+  }
 
   return (
     <figure 

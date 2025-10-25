@@ -37,6 +37,7 @@ export function MatrixPeek({ from }: MatrixPeekProps) {
               seed={node.id} 
               label={node.codename} 
               emoji={node.emoji}
+              avatar={node.avatar}
             />
           </div>
         ))}

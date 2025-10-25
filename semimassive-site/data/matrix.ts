@@ -10,6 +10,7 @@ export type Node = {
   blurb: string;
   skills: string[];
   emoji?: string;
+  avatar?: string;
   isFounder?: boolean;
 };
 
@@ -33,7 +34,8 @@ export const MATRIX_NODES: Node[] = [
     availability: 'contextual',
     blurb: 'Bridges product and business momentum. Defines value, metrics, and sponsor clarity.',
     skills: ['Outcome framing','Business cases','GTM alignment','Exec narrative'],
-    emoji: '🏛️'
+    emoji: '🏛️',
+    avatar: '/Ray_Chaser.png'
   },
   {
     id: 'telemetry-architect',
@@ -43,7 +45,8 @@ export const MATRIX_NODES: Node[] = [
     availability: 'contextual',
     blurb: 'Maps hesitation and momentum; instruments flows to prove adoption deltas.',
     skills: ['Event taxonomy','Cohort analysis','Experiment design','Dashboards'],
-    emoji: '📈'
+    emoji: '📈',
+    avatar: '/Flo_Status.png'
   },
   {
     id: 'interface-alchemist',
@@ -63,7 +66,8 @@ export const MATRIX_NODES: Node[] = [
     availability: 'summonable',
     blurb: 'Builds natural-feeling spatial interactions and performant scenes.',
     skills: ['Unity','Interaction','Optimization','Scene prototyping'],
-    emoji: '🕶️'
+    emoji: '🕶️',
+    avatar: '/Code_Monkey.png'
   },
   {
     id: 'realtime-artist',
@@ -73,7 +77,8 @@ export const MATRIX_NODES: Node[] = [
     availability: 'specialised',
     blurb: 'Makes complex scenes readable and responsive at runtime.',
     skills: ['UE5','Materials','Niagara','Perf tuning'],
-    emoji: '🎛️'
+    emoji: '🎛️',
+    avatar: '/Max_GPU.png'
   },
   {
     id: 'systems-engineer',

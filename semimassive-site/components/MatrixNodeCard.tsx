@@ -54,7 +54,7 @@ export function MatrixNodeCard({ node }: MatrixNodeCardProps) {
     >
       <div className="flex items-start gap-4 mb-4">
         <div className="w-16 h-16 flex-shrink-0">
-          <NodeGlyph seed={node.id} label={node.codename} emoji={node.emoji} />
+          <NodeGlyph seed={node.id} label={node.codename} emoji={node.emoji} avatar={node.avatar} />
         </div>
         
         <div className="flex-1 min-w-0">
