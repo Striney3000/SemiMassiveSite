@@ -1,0 +1,250 @@
+// =============================================
+// SemiMassive – Matrix V2 Scaffold (Edge‑to‑Edge Portraits)
+// Archetype: The Lab · Presence First · Identity → Discipline → Outcomes
+// ---------------------------------------------
+// Files in this doc:
+// 1) /app/matrix/page.tsx
+// 2) /components/matrix/MatrixCard.tsx
+// 3) /components/matrix/MatrixExpanded.tsx
+// 4) /data/matrixData.ts
+// 5) /lib/ui/motion.ts
+// ---------------------------------------------
+// Notes:
+// - Uses Next.js App Router, React, Tailwind, framer-motion.
+// - Portraits are full‑bleed in cards. Expanded view is a modal overlay.
+// - Naming convention: Real Name — Archetype/Discipline.
+// - Expand structure: Identity → Discipline → Outcomes.
+// =============================================
+
+// ---------------------------------------------
+// 1) /app/matrix/page.tsx
+// ---------------------------------------------
+"use client";
+import { useState } from "react";
+import { MatrixCard } from "@/components/matrix/MatrixCard";
+import { MatrixExpanded } from "@/components/matrix/MatrixExpanded";
+import { MATRIX_NODES, type MatrixNode } from "@/data/matrixData";
+
+export default function MatrixPage() {
+  const [active, setActive] = useState<MatrixNode | null>(null);
+
+  return (
+    <main className="min-h-[70vh] w-full px-4 sm:px-6 lg:px-10 py-16">
+      <header className="mb-10 max-w-4xl">
+        <p className="text-xs uppercase tracking-widest text-zinc-400">The Lab</p>
+        <h1 className="mt-2 text-2xl sm:text-4xl font-semibold text-zinc-100">
+          Matrix — Immersive Presence Panels
+        </h1>
+        <p className="mt-3 text-zinc-400 max-w-2xl">
+          A curated guild of frontier specialists. Tap a presence to reveal their
+          discipline and the outcomes they drive.
+        </p>
+      </header>
+
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {MATRIX_NODES.map((node) => (
+          <MatrixCard key={node.id} node={node} onOpen={() => setActive(node)} />
+        ))}
+      </section>
+
+      <MatrixExpanded open={!!active} node={active} onClose={() => setActive(null)} />
+    </main>
+  );
+}
+
+// ---------------------------------------------
+// 2) /components/matrix/MatrixCard.tsx
+// ---------------------------------------------
+"use client";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { hoverPop } from "@/lib/ui/motion";
+import type { MatrixNode } from "@/data/matrixData";
+
+export function MatrixCard({ node, onOpen }: { node: MatrixNode; onOpen: () => void }) {
+  return (
+    <motion.button
+      whileHover={hoverPop.whileHover}
+      whileTap={hoverPop.whileTap}
+      onClick={onOpen}
+      className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-zinc-900 shadow-lg ring-1 ring-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+      aria-label={`Open ${node.name} — ${node.archetype}`}
+    >
+      {/* Full-bleed portrait */}
+      <div className="absolute inset-0">
+        <Image
+          src={node.portraitSrc}
+          alt={node.name}
+          fill
+          priority={false}
+          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+      </div>
+
+      {/* Gradient at bottom for legibility */}
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent" />
+
+      {/* Identity line */}
+      <div className="absolute bottom-3 left-3 right-3 flex flex-col">
+        <span className="text-base sm:text-lg font-medium text-white drop-shadow">{node.name}</span>
+        <span className="text-xs sm:text-sm text-zinc-200/80 drop-shadow">{node.archetype}</span>
+      </div>
+    </motion.button>
+  );
+}
+
+// ---------------------------------------------
+// 3) /components/matrix/MatrixExpanded.tsx
+// ---------------------------------------------
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { fadeIn, popIn } from "@/lib/ui/motion";
+import type { MatrixNode } from "@/data/matrixData";
+
+export function MatrixExpanded({ open, node, onClose }: { open: boolean; node: MatrixNode | null; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {open && node && (
+        <motion.div
+          {...fadeIn}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* Dismiss layer */}
+          <button aria-label="Close" className="absolute inset-0" onClick={onClose} />
+
+          {/* Card */}
+          <motion.div
+            {...popIn}
+            className="relative z-10 grid w-full max-w-4xl grid-cols-1 md:grid-cols-5 overflow-hidden rounded-3xl bg-zinc-950 ring-1 ring-zinc-800 shadow-2xl"
+          >
+            {/* Left: Portrait (edge-to-edge) */}
+            <div className="relative md:col-span-3 aspect-[3/4] w-full">
+              <Image src={node.portraitSrc} alt={node.name} fill className="object-cover" />
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3">
+                <h3 className="text-white text-xl font-semibold">{node.name}</h3>
+                <p className="text-zinc-300 text-sm">{node.archetype}</p>
+              </div>
+            </div>
+
+            {/* Right: Identity → Discipline → Outcomes */}
+            <div className="md:col-span-2 p-6 md:p-8 flex flex-col gap-5">
+              <section>
+                <h4 className="text-xs uppercase tracking-widest text-zinc-400">Identity</h4>
+                <p className="mt-1 text-zinc-100 text-base">{node.identity}</p>
+              </section>
+
+              <section>
+                <h4 className="text-xs uppercase tracking-widest text-zinc-400">Discipline</h4>
+                <p className="mt-1 text-zinc-200 text-sm leading-relaxed">{node.discipline}</p>
+              </section>
+
+              <section>
+                <h4 className="text-xs uppercase tracking-widest text-zinc-400">Outcomes</h4>
+                <ul className="mt-2 space-y-2 text-zinc-200 text-sm list-disc list-inside">
+                  {node.outcomes.map((o, i) => (
+                    <li key={i}>{o}</li>
+                  ))}
+                </ul>
+              </section>
+
+              <div className="mt-auto pt-2">
+                <button
+                  onClick={onClose}
+                  className="inline-flex items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-100 hover:bg-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ---------------------------------------------
+// 4) /data/matrixData.ts
+// ---------------------------------------------
+export type MatrixNode = {
+  id: string;
+  name: string; // Real name
+  archetype: string; // e.g., "Interface Architect"
+  identity: string; // Full identity line (Name — Archetype)
+  portraitSrc: string; // Public path or remote URL
+  discipline: string; // What they do (short)
+  outcomes: string[]; // What changes when they engage (bullets)
+};
+
+export const MATRIX_NODES: MatrixNode[] = [
+  {
+    id: "nova-sato",
+    name: "Nova Sato",
+    archetype: "Interface Architect",
+    identity: "Nova Sato — Interface Architect",
+    portraitSrc: "/images/matrix/nova-sato.jpg", // TODO: add asset
+    discipline:
+      "Behavioural systems + pattern clarity for complex products. Designs legibility, momentum, and feedback loops across surfaces.",
+    outcomes: [
+      "Users understand the product’s structure faster",
+      "Navigation and selection friction drop measurably",
+      "Feature adoption increases via clearer affordances",
+    ],
+  },
+  {
+    id: "vera-shinn",
+    name: "Vera Shinn",
+    archetype: "Telemetry Architect",
+    identity: "Vera Shinn — Telemetry Architect",
+    portraitSrc: "/images/matrix/vera-shinn.jpg",
+    discipline:
+      "Instrumentation strategy and event taxonomies for product truth. Connects UX questions to measurable signals.",
+    outcomes: [
+      "Analytics reflect actual user behaviours",
+      "Roadmaps shift from opinion to signal",
+      "Experiments isolate causal impact",
+    ],
+  },
+  {
+    id: "caelum-rowe",
+    name: "Caelum Rowe",
+    archetype: "Value Architect",
+    identity: "Caelum Rowe — Value Architect",
+    portraitSrc: "/images/matrix/caelum-rowe.jpg",
+    discipline:
+      "Business model design and value flow orchestration. Aligns behavioural incentives with revenue and retention.",
+    outcomes: [
+      "Pricing and packaging clarify purchase decisions",
+      "Retention loops align with value flows",
+      "LTV increases without coercive dark patterns",
+    ],
+  },
+];
+
+// ---------------------------------------------
+// 5) /lib/ui/motion.ts
+// ---------------------------------------------
+import { Variants } from "framer-motion";
+
+export const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.18 },
+};
+
+export const popIn = {
+  initial: { opacity: 0, scale: 0.98, y: 8 },
+  animate: { opacity: 1, scale: 1, y: 0 },
+  exit: { opacity: 0, scale: 0.98, y: 8 },
+  transition: { duration: 0.22 },
+};
+
+export const hoverPop: { whileHover: Variants; whileTap: Variants } = {
+  whileHover: { scale: 1.01, y: -2 },
+  whileTap: { scale: 0.995 },
+};
