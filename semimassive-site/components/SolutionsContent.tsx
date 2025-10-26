@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { SOLUTIONS } from '@/data/solutions';
-import { MATRIX_NODES } from '@/data/matrix';
+import { MATRIX_NODES } from '@/data/matrixData';
 import { InterventionItem } from './InterventionItem';
 import { OverlayModal } from './OverlayModal';
 import { LineDiagram } from './LineDiagram';
@@ -108,7 +108,7 @@ export function SolutionsContent() {
                           href={`/matrix#${nodeId}`}
                           className="text-aqua-400 hover:text-aqua-300 underline transition-colors duration-soft focus:outline-none focus:ring-2 focus:ring-aqua-400 focus:ring-offset-2 focus:ring-offset-base-900 rounded px-1"
                         >
-                          {node.codename}
+                          {node.name}
                         </Link>
                       ) : null;
                     })}

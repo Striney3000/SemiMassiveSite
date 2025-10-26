@@ -1,4 +1,4 @@
-import type { Pillar } from './matrix';
+export type Pillar = 'AI' | 'Behavioural' | 'Spatial' | 'Research';
 
 export type Solution = {
   id: string;
@@ -28,7 +28,7 @@ export const SOLUTIONS: Solution[] = [
     ],
     engineering:
       'When the intervention moves to build, we route through a dedicated engineering layer to wire prompt scaffolds, safe-ops, and telemetry for trust signals—so adoption ships, not just the UI.',
-    matrixNodes: ['interface-alchemist', 'systems-engineer', 'telemetry-architect'],
+    matrixNodes: ['nova-sato', 'jax-morales', 'vera-shinn'],
   },
   {
     id: 'first-win-architecture',
@@ -44,7 +44,7 @@ export const SOLUTIONS: Solution[] = [
     ],
     engineering:
       'For production rollout, we add routing logic, state gating, and event hooks so "first success" is both consistent and measurable across cohorts.',
-    matrixNodes: ['foundry-lead', 'interface-alchemist', 'telemetry-architect'],
+    matrixNodes: ['nick-strine', 'nova-sato', 'vera-shinn'],
   },
   {
     id: 'friction-surgery',
@@ -60,7 +60,7 @@ export const SOLUTIONS: Solution[] = [
     ],
     engineering:
       'We wire small, safe changes into live flows with feature flags and observability—so improvements land quickly and stay reversible.',
-    matrixNodes: ['foundry-lead', 'systems-engineer', 'telemetry-architect'],
+    matrixNodes: ['nick-strine', 'jax-morales', 'vera-shinn'],
   },
   {
     id: 'signal-instrumentation',
@@ -76,6 +76,6 @@ export const SOLUTIONS: Solution[] = [
     ],
     engineering:
       'We implement event schemas, lightweight pipelines, and dashboards so adoption becomes observable—and defendable to sponsors.',
-    matrixNodes: ['telemetry-architect', 'systems-engineer', 'foundry-lead'],
+    matrixNodes: ['vera-shinn', 'jax-morales', 'nick-strine'],
   },
 ];
