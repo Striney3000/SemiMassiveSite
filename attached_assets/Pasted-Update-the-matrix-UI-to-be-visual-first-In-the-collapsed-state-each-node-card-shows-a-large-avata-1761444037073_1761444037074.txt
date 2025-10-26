@@ -1,0 +1,135 @@
+Update the /matrix UI to be visual-first. In the collapsed state, each node card shows a large avatar glyph, codename, short title (one line), and an optional 2–3 pillar chips (or a single “pillars count”). All other content unfolds only when expanded. Maintain current geometric grid, reveal-on-scroll, calm pulses, and accessibility.
+
+1) Card layout changes
+
+components/MatrixNodeCard.tsx
+
+Collapsed state:
+
+Layout: vertical stack, big avatar on top (96–128px), then codename (H3), then one-line title (truncate with ellipsis), then either:
+
+compact pillar row (max 2 chips + “+N”), or
+
+a single subtle badge: “Behavioural · AI · Spatial · Research” (overflow becomes “+N”).
+
+Remove skills, blurb, availability in collapsed view.
+
+Footer row: “Open” button (icon + label) aligned right; entire card still clickable via role="button".
+
+Expanded state (on click or Enter/Space):
+
+Slide down detail section with:
+
+Blurb (2 lines max)
+
+Full pillar chips
+
+Skills (top 6 chips)
+
+Availability note (“Summoned as context requires” / “Contextual” / “Specialised”)
+
+(Optional) subtle horizontal rule above detail for separation
+
+Keep founder’s subtle inner glow.
+
+Motion:
+
+Expand/collapse height + opacity over ~180ms (disable under prefers-reduced-motion).
+
+A11y:
+
+Single interactive root: <button> wrapper with aria-expanded and aria-controls.
+
+Title gets id and panel uses aria-labelledby.
+
+Props: unchanged; refactor rendering only.
+
+2) Larger avatar glyph
+
+components/NodeGlyph.tsx
+
+Add size prop: size?: 'sm'|'md'|'lg' with defaults (lg = 112px).
+
+In MatrixNodeCard collapsed view, use size="lg"; in expanded header, keep the same glyph (no duplicate).
+
+Ensure glyph stays crisp (SVG viewBox + preserveAspectRatio).
+
+3) Grid & spacing updates
+
+components/MatrixGrid.tsx
+
+Increase row height and gap for breathing room: gap-6 md:gap-8.
+
+Card min-height in collapsed state: ~260–300px to showcase the large avatar.
+
+Responsive columns: grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4.
+
+Maintain reveal-on-scroll and pulse effects; do not pulse the expanded panel content (only card shell).
+
+4) Pillar chip compaction logic
+
+components/PillarChips.tsx
+
+Add compact?: boolean prop.
+
+When compact is true, render up to 2 chips; if more, append “+N” quiet label.
+
+In expanded view, render the full set (no truncation).
+
+5) Text tightening (collapsed)
+
+Codename = single line, medium weight.
+
+Title = single line, muted (text-neutral-300), truncated.
+
+Remove blurb entirely from collapsed.
+
+Keep a consistent card height to avoid jumpy masonry.
+
+6) Keyboard & pointer
+
+Entire card is focusable; Enter/Space toggles.
+
+Add visible focus ring (aqua) around the whole card (not just the button).
+
+Pointer: default; only the “Open” affordance uses cursor-pointer to hint action on hover.
+
+7) Analytics
+
+Keep Matrix Node Toggle event; add state: 'collapsed'|'expanded'.
+
+Optional: Matrix Card Hover (throttled) when user dwells > 400ms.
+
+8) Tests
+
+Update __tests__/matrix.test.tsx:
+
+Collapsed card does not render blurb or full skills.
+
+Avatar size is ≥96px (query by role/label then check bounding box via JSDOM style if available; otherwise class presence).
+
+Expanding reveals blurb and full chips; aria-expanded toggles true.
+
+9) Done criteria
+
+Collapsed cards are highly visual (large avatar glyph), minimal text (codename + short title + compact pillars).
+
+Expanded state reveals full detail smoothly; a11y intact; reduced-motion respected.
+
+Grid remains calm; pulses limited to card shell; reveal-on-scroll unchanged.
+
+Tests updated and pass.
+
+Micro-copy recommendations (collapsed)
+
+Codename first (e.g., Nova Sato)
+
+Title second: “Interface Alchemist — UX/UI & Web”
+
+Pillars compact: “Behavioural · AI · +1”
+
+Visual suggestions
+
+Let the large avatar subtly “breathe” with the existing pulse (very low amplitude).
+
+Keep background warm-dark; use Aqua only for focus/outline and the tiny “Open ↗︎” icon.

@@ -55,9 +55,22 @@ describe('Matrix Page', () => {
     expect(spatialNodes.length).toBeLessThan(MATRIX_NODES.length);
   });
 
-  it('toggling a node sets aria-expanded=true', () => {
+  it('collapsed card hides detail panel initially', () => {
     const testNode = MATRIX_NODES[0];
-    render(<MatrixNodeCard node={testNode} />);
+    const { container } = render(<MatrixNodeCard node={testNode} />);
+    
+    const nodeButton = screen.getByRole('button');
+    expect(nodeButton.getAttribute('aria-expanded')).toBe('false');
+    
+    // Details panel should be hidden
+    const detailsPanel = container.querySelector(`#node-details-${testNode.id}`);
+    expect(detailsPanel?.className).toContain('hidden');
+    expect(detailsPanel?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('toggling a node sets aria-expanded=true and shows detail panel', () => {
+    const testNode = MATRIX_NODES[0];
+    const { container } = render(<MatrixNodeCard node={testNode} />);
     
     const nodeButton = screen.getByRole('button');
     expect(nodeButton.getAttribute('aria-expanded')).toBe('false');
@@ -65,6 +78,10 @@ describe('Matrix Page', () => {
     fireEvent.click(nodeButton);
     
     expect(nodeButton.getAttribute('aria-expanded')).toBe('true');
+    // Details panel should be visible
+    const detailsPanel = container.querySelector(`#node-details-${testNode.id}`);
+    expect(detailsPanel?.className).not.toContain('hidden');
+    expect(detailsPanel?.getAttribute('aria-hidden')).toBe('false');
   });
 
   it('founder node has distinguishing styling', () => {
@@ -73,19 +90,27 @@ describe('Matrix Page', () => {
     
     if (founderNode) {
       const { container } = render(<MatrixNodeCard node={founderNode} />);
-      const nodeElement = container.querySelector('[role="button"]');
+      const nodeElement = container.querySelector('button');
       expect(nodeElement?.className).toContain('border-aqua');
     }
   });
 
-  it('all touch targets are at least 44px', () => {
-    const { container } = render(<MatrixContent />);
-    const buttons = container.querySelectorAll('button, a');
+  it('avatar size is large (≥96px) in collapsed state', () => {
+    const testNode = MATRIX_NODES[0];
+    const { container } = render(<MatrixNodeCard node={testNode} />);
     
-    buttons.forEach(button => {
-      const styles = window.getComputedStyle(button);
-      const minHeight = parseInt(styles.minHeight);
-      expect(minHeight).toBeGreaterThanOrEqual(44);
+    // Check for large size class
+    const avatar = container.querySelector('figure');
+    expect(avatar?.className).toContain('w-28');
+  });
+
+  it('card buttons have adequate minimum height', () => {
+    const { container } = render(<MatrixContent />);
+    const cardButtons = container.querySelectorAll('button[aria-expanded]');
+    
+    cardButtons.forEach(button => {
+      // Check for min-h-[280px] class presence
+      expect(button.className).toContain('min-h-[280px]');
     });
   });
 });

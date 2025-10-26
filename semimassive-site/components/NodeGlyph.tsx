@@ -3,6 +3,7 @@ interface NodeGlyphProps {
   label: string;
   emoji?: string;
   avatar?: string;
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
@@ -16,7 +17,18 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-export function NodeGlyph({ seed, label, emoji, avatar, className = '' }: NodeGlyphProps) {
+export function NodeGlyph({ seed, label, emoji, avatar, size = 'md', className = '' }: NodeGlyphProps) {
+  const sizeClasses = {
+    sm: 'w-12 h-12',
+    md: 'w-16 h-16',
+    lg: 'w-28 h-28'
+  };
+  
+  const emojiSizeClasses = {
+    sm: 'text-lg',
+    md: 'text-2xl',
+    lg: 'text-5xl'
+  };
   const hash = hashString(seed);
   
   const angle1 = (hash % 360);
@@ -35,7 +47,7 @@ export function NodeGlyph({ seed, label, emoji, avatar, className = '' }: NodeGl
   if (avatar) {
     return (
       <figure 
-        className={`relative ${className}`}
+        className={`relative ${sizeClasses[size]} ${className}`}
         aria-label={`${label} avatar`}
       >
         <img
@@ -49,12 +61,13 @@ export function NodeGlyph({ seed, label, emoji, avatar, className = '' }: NodeGl
 
   return (
     <figure 
-      className={`relative ${className}`}
+      className={`relative ${sizeClasses[size]} ${className}`}
       aria-label={`${label} glyph`}
     >
       <svg
         viewBox="0 0 100 100"
         className="w-full h-full"
+        preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
         <defs>
@@ -87,7 +100,7 @@ export function NodeGlyph({ seed, label, emoji, avatar, className = '' }: NodeGl
       </svg>
       
       {emoji && (
-        <div className="absolute inset-0 flex items-center justify-center text-2xl pointer-events-none">
+        <div className={`absolute inset-0 flex items-center justify-center ${emojiSizeClasses[size]} pointer-events-none`}>
           {emoji}
         </div>
       )}
