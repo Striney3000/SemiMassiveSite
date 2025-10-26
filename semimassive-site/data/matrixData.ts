@@ -1,124 +1,139 @@
 export type MatrixNode = {
   id: string;
-  name: string;
-  archetype: string;
-  identity: string;
-  portraitSrc: string;
-  discipline: string;
-  outcomes: string[];
+  name: string;        // Public-facing name (alias or real)
+  archetype: string;   // Role / service title (plain-English)
+  identity: string;    // "<Name> — <Role>"
+  portraitSrc: string; // /public path or remote URL
+  discipline: string;  // Short description of what they do
+  outcomes: string[];  // Three benefit bullets
 };
 
 export const MATRIX_NODES: MatrixNode[] = [
+  // 1) Behavioural & Product Design (you)
   {
     id: "nick-strine",
     name: "Nick Strine",
-    archetype: "Behavioural Systems Director",
-    identity: "Nick Strine — Behavioural Systems Director",
+    archetype: "Behavioural & Product Design Director",
+    identity: "Nick Strine — Behavioural & Product Design Director",
     portraitSrc: "/images/matrix/nick-strine.jpg",
     discipline:
-      "Behavioural design, UX systems, and immersive strategy for products that need measurable engagement.",
+      "Behavioural design, systems UX, and product strategy for products that need measurable engagement.",
     outcomes: [
-      "Sharper product–market pull and retention",
-      "System-level clarity across features and flows",
+      "Clearer product structure and decision flow",
+      "Retention and habit loops improve without dark patterns",
       "Strategy translated into shippable UX patterns",
     ],
   },
+
+  // 2) UX Design (multi-surface systems)
   {
-    id: "nova-sato",
-    name: "Nova Sato",
-    archetype: "Interface Architect",
-    identity: "Nova Sato — Interface Architect",
-    portraitSrc: "/images/matrix/nova-sato.jpg",
+    id: "zen-maker",
+    name: "Zen Maker",
+    archetype: "UX Systems Designer",
+    identity: "Zen Maker — UX Systems Designer",
+    portraitSrc: "/images/matrix/zen-maker.jpg",
     discipline:
-      "Behavioural systems + pattern clarity for complex products. Designs legibility, momentum, and feedback loops across surfaces.",
+      "Multi-platform experience design, progressive systems, and AI-adaptive UX that scales across surfaces.",
     outcomes: [
-      "Users understand the product's structure faster",
-      "Navigation and selection friction drop measurably",
-      "Feature adoption increases via clearer affordances",
+      "Coherent end-to-end journeys across web, mobile, XR",
+      "Reduced friction at key wayfinding and selection points",
+      "Reusable patterns that accelerate feature delivery",
     ],
   },
+
+  // 3) UI / Motion / Visual Interaction
   {
-    id: "vera-shinn",
-    name: "Vera Shinn",
-    archetype: "Telemetry Architect",
-    identity: "Vera Shinn — Telemetry Architect",
-    portraitSrc: "/images/matrix/vera-shinn.jpg",
+    id: "flo-charts",
+    name: "Flo Charts",
+    archetype: "UI + Interaction Designer",
+    identity: "Flo Charts — UI + Interaction Designer",
+    portraitSrc: "/images/matrix/flo-charts.jpg",
     discipline:
-      "Instrumentation strategy and event taxonomies for product truth. Connects UX questions to measurable signals.",
+      "UI art, 2D/3D interactions, motion design, and brand-tight component styling.",
     outcomes: [
-      "Analytics reflect actual user behaviours",
-      "Roadmaps shift from opinion to signal",
-      "Experiments isolate causal impact",
+      "Higher perceived quality and product trust",
+      "Clearer visual states and faster task completion",
+      "Consistent visual language across new features",
     ],
   },
+
+  // 4) R&D / Emerging Tech
   {
-    id: "caelum-rowe",
-    name: "Caelum Rowe",
-    archetype: "Value Architect",
-    identity: "Caelum Rowe — Value Architect",
-    portraitSrc: "/images/matrix/caelum-rowe.jpg",
+    id: "ray-tracey",
+    name: "Ray Tracey",
+    archetype: "R&D + Emerging Tech Engineer",
+    identity: "Ray Tracey — R&D + Emerging Tech Engineer",
+    portraitSrc: "/images/matrix/ray-tracey.jpg",
     discipline:
-      "Business model design and value flow orchestration. Aligns behavioural incentives with revenue and retention.",
+      "AI/LLM and XR integrations, rapid prototyping, and production-ready pipelines (game engines, web, native).",
     outcomes: [
-      "Pricing and packaging clarify purchase decisions",
-      "Retention loops align with real value",
-      "LTV increases without coercive dark patterns",
+      "Working prototypes that de-risk big bets",
+      "Faster iteration from concept to demo",
+      "Clean integrations without tech-debt sprawl",
     ],
   },
+
+  // 5) Data / Telemetry
   {
-    id: "aria-tanaka",
-    name: "Aria Tanaka",
-    archetype: "Onboarding Architect",
-    identity: "Aria Tanaka — Onboarding Architect",
-    portraitSrc: "/images/matrix/aria-tanaka.jpg",
+    id: "ann-liticus",
+    name: "Ann Liticus",
+    archetype: "Product Telemetry & Insights",
+    identity: "Ann Liticus — Product Telemetry & Insights",
+    portraitSrc: "/images/matrix/ann-liticus.jpg",
     discipline:
-      "Activation funnels, habit formation, and progressive disclosure for fast, confident first-use.",
+      "Event models, dashboards, and experiment design that connect UX questions to truthful signals.",
     outcomes: [
-      "Faster time-to-value in first session",
-      "Higher activation and feature adoption",
-      "Reduced early-session drop-off",
+      "Roadmaps shift from opinion to evidence",
+      "Metrics reflect real user behaviour (not vanity)",
+      "Experiments isolate causal impact on KPIs",
     ],
   },
+
+  // 6) Product / Value Strategy
   {
-    id: "jax-morales",
-    name: "Jax Morales",
-    archetype: "Interaction Systems Engineer",
-    identity: "Jax Morales — Interaction Systems Engineer",
-    portraitSrc: "/images/matrix/jax-morales.jpg",
+    id: "mr-wong",
+    name: "Mr Wong",
+    archetype: "Product & Value Strategy",
+    identity: "Mr Wong — Product & Value Strategy",
+    portraitSrc: "/images/matrix/mr-wong.jpg",
     discipline:
-      "Real-time feedback loops, micro-interactions, and cross-surface consistency that make products feel crisp.",
+      "Monetisation, pricing/packaging, and positioning that align user value with business value.",
     outcomes: [
-      "Lower error rates and hesitation",
-      "Perceived performance feels faster",
-      "Delight without cognitive overhead",
+      "Sharper value proposition and market pull",
+      "Pricing clarifies purchase decisions and upgrades",
+      "LTV growth without coercive mechanics",
     ],
   },
+
+  // 7) Narrative / Creative Direction
   {
     id: "silent-frame",
     name: "Silent Frame",
-    archetype: "Narrative Architect",
-    identity: "Silent Frame — Narrative Architect",
+    archetype: "Narrative & Creative Direction",
+    identity: "Silent Frame — Narrative & Creative Direction",
     portraitSrc: "/images/matrix/silent-frame.jpg",
     discipline:
-      "Meaning design and identity coherence. Shapes the story users tell themselves about your product.",
+      "Story, identity, and tone systems that make features read as one coherent product narrative.",
     outcomes: [
-      "Clear product why that customers can repeat",
-      "Features read as one coherent narrative",
+      "Memorable positioning users can repeat",
+      "Cohesive look/voice across product and comms",
       "Emotional stickiness without hype",
     ],
   },
+
+  // 8) Immersive / Atmosphere
   {
-    id: "ray-chaser",
-    name: "Ray Chaser",
-    archetype: "Immersion Architect",
-    identity: "Ray Chaser — Immersion Architect",
-    portraitSrc: "/images/matrix/ray-chaser.jpg",
+    id: "lucky-knuckler",
+    name: "Lucky Knuckler",
+    archetype: "Atmosphere & Immersive Experience Design",
+    identity: "Lucky Knuckler — Atmosphere & Immersive Experience Design",
+    portraitSrc: "/images/matrix/lucky-knuckler.jpg",
     discipline:
-      "Spatial UX and light-driven presence. Crafts environments, camera, and depth so digital spaces feel real.",
+      "Emotional technology of mood and environment—interactive ambience that makes software feel like a place.",
     outcomes: [
-      "Stronger presence and time-on-task",
-      "Spatial clarity reduces disorientation",
-      "Moments feel cinematic without noise",
+      "Distinct product vibe and 'world-feel'",
+      "More time-on-task through engaging ambience",
+      "Cinematic moments without visual noise",
     ],
   },
 ];
