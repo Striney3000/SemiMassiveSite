@@ -34,24 +34,23 @@ Semimassive is a modern marketing website for a product development consultancy 
 - Accessibility-first design with semantic HTML, focus rings, and logical keyboard navigation
 - Test coverage in `__tests__/about.test.tsx` verifying page structure and content
 
-**Neural Matrix Page Implementation** (Stage 12):
-- Live capability layer at `/matrix` showcasing 8 specialized team nodes (founder and collaborators)
-- Filterable by capability pillars: All, Behavioural, AI, Spatial, Research
-- Interactive node cards with expand/collapse for detailed capability views
-- Custom components: `NodeGlyph` (seeded SVG avatars with unique patterns per node, now with support for custom avatar images), `MatrixNodeCard` (expandable cards with hover states), `MatrixGrid` (responsive grid with scroll-reveal animations), `MatrixFilters` (accessible button group)
-- Nick Strine (founder) features subtle aqua inner glow in glyph, appears among peers without center bias
-- Scroll-reveal animations using IntersectionObserver, respects `prefers-reduced-motion` preference
-- Full keyboard navigation support with 44px tap targets and ARIA attributes
-- Analytics tracking: Matrix Node Toggle, Matrix Filter, and Nav Click events via `lib/analytics.ts`
-- CollectiveOfExperts JSON-LD schema with complete team member details for SEO
-- Hydration-safe implementation: nodes start visible and progressively animate in, Section component always renders motion elements with gated animation props
-- Data model in `data/matrix.ts` with type-safe node definitions including capabilities, specialties, and pillar associations
-- **Profile Avatars** (October 25, 2025): Added custom avatar images for 4 team members:
-  - Ray_Chaser.png → Caelum Rowe (Value Architect)
-  - Code_Monkey.png → Juno Rah (Spatial Engineer)
-  - Flo_Status.png → Vera Shinn (Telemetry Architect)
-  - Max_GPU.png → Rook Ember (Realtime Technical Artist)
-  - NodeGlyph component now displays avatar images when available, falling back to generated SVG glyphs with emojis
+**Matrix V2 — Immersive Presence Panels** (Stage 14, October 26, 2025):
+- Complete redesign from codename-based to real name + archetype presentation
+- Edge-to-edge portrait gallery at `/matrix` with "The Lab" branding
+- Full-bleed portrait cards (3:4 aspect ratio) with hover animations and bottom gradient
+- Modal overlay expansion showing Identity → Discipline → Outcomes structure
+- Custom components:
+  - `MatrixCard`: Portrait cards with name/archetype overlay
+  - `MatrixExpanded`: Accessible modal with focus management, keyboard trapping, Escape handler
+  - `MatrixClient`: Client component for interactivity with state management
+  - `lib/ui/motion.ts`: Reusable motion utilities (fadeIn, popIn, hoverPop) with prefers-reduced-motion support
+- Data model in `data/matrixData.ts`: name, archetype, identity, discipline, outcomes[]
+- AI-generated portrait images for Nova Sato (Interface Architect), Vera Shinn (Telemetry Architect), Caelum Rowe (Value Architect)
+- Full accessibility: focus trapping, Escape key, click-outside-to-close, ARIA modal semantics
+- Motion respects prefers-reduced-motion media query
+- SEO: Server component with generateMetadata + ItemList JSON-LD schema
+- Removed old components: NodeGlyph, PillarChips, MatrixFilters, MatrixGrid, expandable cards
+- Updated MatrixPeek component to simplified text link
 
 **FlowForge Reframing** (Stage 13):
 - Reframed FlowForge from product to internal framework/methodology across all pages
