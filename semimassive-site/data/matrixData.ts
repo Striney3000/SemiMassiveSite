@@ -10,6 +10,20 @@ export type MatrixNode = {
 
 export const MATRIX_NODES: MatrixNode[] = [
   {
+    id: "nick-strine",
+    name: "Nick Strine",
+    archetype: "Behavioural Systems Director",
+    identity: "Nick Strine — Behavioural Systems Director",
+    portraitSrc: "/images/matrix/nick-strine.jpg",
+    discipline:
+      "Behavioural design, UX systems, and immersive strategy for products that need measurable engagement.",
+    outcomes: [
+      "Sharper product–market pull and retention",
+      "System-level clarity across features and flows",
+      "Strategy translated into shippable UX patterns",
+    ],
+  },
+  {
     id: "nova-sato",
     name: "Nova Sato",
     archetype: "Interface Architect",
@@ -47,22 +61,8 @@ export const MATRIX_NODES: MatrixNode[] = [
       "Business model design and value flow orchestration. Aligns behavioural incentives with revenue and retention.",
     outcomes: [
       "Pricing and packaging clarify purchase decisions",
-      "Retention loops align with value flows",
+      "Retention loops align with real value",
       "LTV increases without coercive dark patterns",
-    ],
-  },
-  {
-    id: "nick-strine",
-    name: "Nick Strine",
-    archetype: "Behavioural Systems Director",
-    identity: "Nick Strine — Behavioural Systems Director",
-    portraitSrc: "/images/matrix/nick-strine.jpg",
-    discipline:
-      "Behavioural design, UX systems, and immersive strategy for products that need measurable engagement.",
-    outcomes: [
-      "Sharper product-market pull and retention",
-      "System-level clarity across features and flows",
-      "Strategy translated into shippable UX patterns",
     ],
   },
   {
@@ -72,9 +72,9 @@ export const MATRIX_NODES: MatrixNode[] = [
     identity: "Aria Tanaka — Onboarding Architect",
     portraitSrc: "/images/matrix/aria-tanaka.jpg",
     discipline:
-      "Activation funnels, habit formation, and progressive disclosure.",
+      "Activation funnels, habit formation, and progressive disclosure for fast, confident first-use.",
     outcomes: [
-      "Faster time-to-value",
+      "Faster time-to-value in first session",
       "Higher activation and feature adoption",
       "Reduced early-session drop-off",
     ],
@@ -86,11 +86,39 @@ export const MATRIX_NODES: MatrixNode[] = [
     identity: "Jax Morales — Interaction Systems Engineer",
     portraitSrc: "/images/matrix/jax-morales.jpg",
     discipline:
-      "Real-time feedback loops, micro-interactions, and cross-surface consistency.",
+      "Real-time feedback loops, micro-interactions, and cross-surface consistency that make products feel crisp.",
     outcomes: [
       "Lower error rates and hesitation",
-      "Crisper perceived performance",
+      "Perceived performance feels faster",
       "Delight without cognitive overhead",
+    ],
+  },
+  {
+    id: "silent-frame",
+    name: "Silent Frame",
+    archetype: "Narrative Architect",
+    identity: "Silent Frame — Narrative Architect",
+    portraitSrc: "/images/matrix/silent-frame.jpg",
+    discipline:
+      "Meaning design and identity coherence. Shapes the story users tell themselves about your product.",
+    outcomes: [
+      "Clear product why that customers can repeat",
+      "Features read as one coherent narrative",
+      "Emotional stickiness without hype",
+    ],
+  },
+  {
+    id: "ray-chaser",
+    name: "Ray Chaser",
+    archetype: "Immersion Architect",
+    identity: "Ray Chaser — Immersion Architect",
+    portraitSrc: "/images/matrix/ray-chaser.jpg",
+    discipline:
+      "Spatial UX and light-driven presence. Crafts environments, camera, and depth so digital spaces feel real.",
+    outcomes: [
+      "Stronger presence and time-on-task",
+      "Spatial clarity reduces disorientation",
+      "Moments feel cinematic without noise",
     ],
   },
 ];
