@@ -1,0 +1,72 @@
+Paste-ready prompt for Replit (adds links + schema + sitemap)
+
+Paste this to Replit AI:
+
+Wire the Matrix page into navigation and crosslinks.
+
+Header nav
+
+In components/Header.tsx, add a nav item Matrix → /matrix between Services and About.
+
+Apply aria-current="page" when on /matrix. Ensure 44×44 tap targets and visible focus rings.
+
+Homepage
+
+In app/page.tsx under the main CTA, add a quiet secondary link:
+Text: “See the Neural Matrix →” → /matrix
+Track: track('Nav Click', { from: 'home', to: 'matrix' }).
+
+Services & About
+
+Ensure MatrixPeek is rendered near the bottom of /services (“How we work” section) and /about (above Founder).
+If missing, import and add:
+
+import { MatrixPeek } from '@/components/MatrixPeek';
+// ...
+<MatrixPeek />
+
+
+Footer
+
+In components/Footer.tsx, add Matrix → /matrix in the primary links group.
+
+Breadcrumbs (optional, calm)
+
+Add a minimal breadcrumb on /matrix using aria markup:
+Home → Matrix (use nav[aria-label="breadcrumb"] with an ordered list).
+
+SEO
+
+In app/matrix/page.tsx, verify generateMetadata() has:
+
+title: 'Neural Matrix — Capability Layer | SemiMassive'
+
+description: 'A living capability layer we activate per intervention. No bench. No org chart.'
+
+canonical ${SITE}/matrix
+
+Add SiteNavigationElement JSON-LD globally (e.g., in app/layout.tsx) including Matrix:
+
+const navJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SiteNavigationElement',
+  name: ['Home','Services','Solutions','Matrix','About'],
+  url: [`${SITE}/`,`${SITE}/services`,`${SITE}/solutions`,`${SITE}/matrix`,`${SITE}/about`],
+};
+
+
+Inject with <script type="application/ld+json">{JSON.stringify(navJsonLd)}</script>.
+
+Sitemap
+
+If using next-sitemap, ensure /matrix is included. If manual, add <loc>${SITE}/matrix</loc> to public/sitemap.xml.
+
+Tests
+
+__tests__/nav.test.tsx: assert header contains a “Matrix” link pointing to /matrix and aria-current="page" when on that route.
+
+__tests__/home.test.tsx: assert “See the Neural Matrix →” link exists to /matrix.
+
+__tests__/footer.test.tsx: assert footer includes a Matrix link.
+
+Done criteria: Matrix is reachable from header, homepage, services/about (peek), solutions overlays, and footer; metadata + JSON-LD updated; sitemap includes /matrix; tests pass.

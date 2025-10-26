@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { Prose } from '@/components/Prose';
 import { Accordion, AccordionItem } from '@/components/Accordion';
+import { MatrixPeek } from '@/components/MatrixPeek';
 import { track } from '@/lib/analytics';
 
 export function ServicesContent() {
@@ -251,6 +252,10 @@ export function ServicesContent() {
               </p>
             </Prose>
           </div>
+        </Section>
+
+        <Section animate={true}>
+          <MatrixPeek from="services" />
         </Section>
 
         <Section animate={true}>

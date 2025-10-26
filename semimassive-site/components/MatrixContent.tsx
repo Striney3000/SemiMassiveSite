@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MATRIX_NODES, type Pillar } from '@/data/matrix';
 import { MatrixGrid } from './MatrixGrid';
 import { MatrixFilters } from './MatrixFilters';
+import { Breadcrumb } from './Breadcrumb';
 import { Section } from './Section';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
@@ -22,6 +23,8 @@ export function MatrixContent() {
   return (
     <Section className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
+        <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Matrix', href: '/matrix' }]} />
+        
         <div className="max-w-3xl mb-12">
           <h1 className="text-5xl md:text-6xl font-heading font-bold text-text-100 mb-6">
             The Neural Matrix

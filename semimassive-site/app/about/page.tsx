@@ -6,6 +6,7 @@ import { Prose } from '@/components/Prose';
 import { CTA } from '@/components/CTA';
 import { AboutPrinciples } from '@/components/AboutPrinciples';
 import { FounderCard } from '@/components/FounderCard';
+import { MatrixPeek } from '@/components/MatrixPeek';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -202,6 +203,10 @@ export default function AboutPage() {
               </Prose>
             </div>
           </div>
+        </Section>
+
+        <Section className="max-w-5xl mx-auto">
+          <MatrixPeek from="about" />
         </Section>
 
         <Section className="max-w-5xl mx-auto">

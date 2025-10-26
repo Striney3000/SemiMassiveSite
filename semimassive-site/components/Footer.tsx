@@ -18,6 +18,7 @@ export function Footer() {
     { href: '/', label: 'Home', isExternal: false },
     { href: '/interventions', label: 'Solutions', isExternal: false },
     { href: '/services', label: 'Services', isExternal: false },
+    { href: '/matrix', label: 'Matrix', isExternal: false },
     { href: '/about', label: 'About', isExternal: false },
     { href: 'mailto:hello@semimassive.com', label: 'Contact', isExternal: true },
   ];
@@ -37,7 +38,7 @@ export function Footer() {
                 {item.isExternal ? (
                   <a
                     href={item.href}
-                    className="text-text-300 hover:text-text-100 transition-colors text-base no-underline"
+                    className="inline-flex items-center text-text-300 hover:text-text-100 transition-colors text-base no-underline min-h-[44px] px-2 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-400 rounded"
                     onClick={item.label === 'Contact' ? handleContactClick : undefined}
                   >
                     {item.label}
@@ -45,7 +46,7 @@ export function Footer() {
                 ) : (
                   <Link
                     href={item.href}
-                    className="text-text-300 hover:text-text-100 transition-colors text-base no-underline"
+                    className="inline-flex items-center text-text-300 hover:text-text-100 transition-colors text-base no-underline min-h-[44px] px-2 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua-400 rounded"
                   >
                     {item.label}
                   </Link>

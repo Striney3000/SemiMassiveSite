@@ -53,6 +53,20 @@ export default function RootLayout({
 }>) {
   const isProd = process.env.NODE_ENV === 'production';
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+  const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+  const navJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SiteNavigationElement',
+    name: ['Home', 'Services', 'Solutions', 'Matrix', 'About'],
+    url: [
+      `${SITE}/`,
+      `${SITE}/services`,
+      `${SITE}/interventions`,
+      `${SITE}/matrix`,
+      `${SITE}/about`
+    ],
+  };
 
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
@@ -62,6 +76,10 @@ export default function RootLayout({
         )}
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(navJsonLd) }}
+        />
         <GlobalTTFCInitializer />
         <a href="#content" className="skip-link">
           Skip to content
