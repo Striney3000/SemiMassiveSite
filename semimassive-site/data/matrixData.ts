@@ -51,4 +51,46 @@ export const MATRIX_NODES: MatrixNode[] = [
       "LTV increases without coercive dark patterns",
     ],
   },
+  {
+    id: "nick-strine",
+    name: "Nick Strine",
+    archetype: "Behavioural Systems Director",
+    identity: "Nick Strine — Behavioural Systems Director",
+    portraitSrc: "/images/matrix/nick-strine.jpg",
+    discipline:
+      "Behavioural design, UX systems, and immersive strategy for products that need measurable engagement.",
+    outcomes: [
+      "Sharper product-market pull and retention",
+      "System-level clarity across features and flows",
+      "Strategy translated into shippable UX patterns",
+    ],
+  },
+  {
+    id: "aria-tanaka",
+    name: "Aria Tanaka",
+    archetype: "Onboarding Architect",
+    identity: "Aria Tanaka — Onboarding Architect",
+    portraitSrc: "/images/matrix/aria-tanaka.jpg",
+    discipline:
+      "Activation funnels, habit formation, and progressive disclosure.",
+    outcomes: [
+      "Faster time-to-value",
+      "Higher activation and feature adoption",
+      "Reduced early-session drop-off",
+    ],
+  },
+  {
+    id: "jax-morales",
+    name: "Jax Morales",
+    archetype: "Interaction Systems Engineer",
+    identity: "Jax Morales — Interaction Systems Engineer",
+    portraitSrc: "/images/matrix/jax-morales.jpg",
+    discipline:
+      "Real-time feedback loops, micro-interactions, and cross-surface consistency.",
+    outcomes: [
+      "Lower error rates and hesitation",
+      "Crisper perceived performance",
+      "Delight without cognitive overhead",
+    ],
+  },
 ];
