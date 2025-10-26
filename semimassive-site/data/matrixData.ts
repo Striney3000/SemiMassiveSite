@@ -47,7 +47,7 @@ export const MATRIX_NODES: MatrixNode[] = [
     name: "Flo Charts",
     archetype: "UI + Interaction Designer",
     identity: "Flo Charts — UI + Interaction Designer",
-    portraitSrc: "/images/matrix/flo-charts.jpg",
+    portraitSrc: "/images/matrix/flo-charts.png",
     discipline:
       "UI art, 2D/3D interactions, motion design, and brand-tight component styling.",
     outcomes: [
@@ -63,7 +63,7 @@ export const MATRIX_NODES: MatrixNode[] = [
     name: "Ray Tracey",
     archetype: "R&D + Emerging Tech Engineer",
     identity: "Ray Tracey — R&D + Emerging Tech Engineer",
-    portraitSrc: "/images/matrix/ray-tracey.jpg",
+    portraitSrc: "/images/matrix/ray-tracey.png",
     discipline:
       "AI/LLM and XR integrations, rapid prototyping, and production-ready pipelines (game engines, web, native).",
     outcomes: [
@@ -95,7 +95,7 @@ export const MATRIX_NODES: MatrixNode[] = [
     name: "Mr Wong",
     archetype: "Product & Value Strategy",
     identity: "Mr Wong — Product & Value Strategy",
-    portraitSrc: "/images/matrix/mr-wong.jpg",
+    portraitSrc: "/images/matrix/mr-wong.png",
     discipline:
       "Monetisation, pricing/packaging, and positioning that align user value with business value.",
     outcomes: [
